@@ -13,10 +13,10 @@ public class qitafeiji : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        StartCoroutine(shuaxinweizhi());
+        StartCoroutine(Shuaxinweizhi());
     }
 
-    IEnumerator shuaxinweizhi()
+    IEnumerator Shuaxinweizhi()
     {
         yield return new WaitForSeconds(1);
         m_transform.position = new Vector3(zishenzhanji.mPosx[0], zishenzhanji.mPosy[0], 0);
