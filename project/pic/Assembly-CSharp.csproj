@@ -69,6 +69,7 @@
     <Compile Include="Assets\Scripts\MsgPackage.cs" />
     <Compile Include="Assets\Scripts\OnButtonClickEvent.cs" />
     <Compile Include="Assets\Scripts\playerItems.cs" />
+    <None Include="Assets\Test.txt" />
     <Reference Include="UnityEngine.UI">
       <HintPath>E:/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
     </Reference>

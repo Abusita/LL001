@@ -10,7 +10,7 @@ public class BattleControl : MonoBehaviour {
     //临时数据
     int maxGroups = 2;
     int maxItems = 16;
-    int bornStandard = 60;
+    int bornStandard = 50;
 
 
     int roundIndex = 0;
@@ -42,12 +42,19 @@ public class BattleControl : MonoBehaviour {
         Random.InitState((int)System.DateTime.Now.Ticks);
         for (int i = 0; i < maxGroups; i++)
         {
+            
             BattleData.Role role = new BattleData.Role();
             int idIndex = 0;
             for (int j = 0; j < maxItems / 2; j++)
             {
                 Card card = new Card();
-                float rd = Random.Range(0, 100);
+
+                float rd;
+
+                if ((role.cardList.Count == 0) && (j == maxItems / 2 - 1))
+                    rd = 100;
+                else
+                    rd = Random.Range(0, 100);
                 if (rd > bornStandard)
                 {
                     card.isBorn = true;
