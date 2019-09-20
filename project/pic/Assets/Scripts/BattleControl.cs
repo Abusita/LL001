@@ -1,12 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using CsProtobuf;
 
 public class BattleControl : MonoBehaviour {
 
     public GameObject[] Groups = null;
-    
+
+    private List<playerItems> campCS;
+
     //临时数据
     int maxGroups = 2;
     int maxItems = 16;
@@ -101,6 +103,19 @@ public class BattleControl : MonoBehaviour {
             Groups[i].GetComponent<playerItems>().MsgHandle(msgPackage[i]);
         }
         msgPackage.Clear();
+    }
+
+
+    public void InitScene(MsgPack msg)
+    {
+        Debug.Log("battleControl");
+        if(msg.InitItemPack != null)
+        {
+            foreach(var item in msg.InitItemPack.CampInfos)
+            {
+                campCS[(int)item.Camp].InitCard(item);
+            }
+        }
     }
 
 
@@ -303,7 +318,12 @@ public class BattleControl : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-
+        campCS = new List<playerItems>();
+        foreach (GameObject g in Groups)
+        {
+            playerItems group = new playerItems();
+            campCS.Add(group);
+        }
 	}
 	
 	// Update is called once per frame

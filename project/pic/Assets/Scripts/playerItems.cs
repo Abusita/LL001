@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using CsProtobuf;
+
 
 public class playerItems : MonoBehaviour {
 
@@ -10,6 +12,33 @@ public class playerItems : MonoBehaviour {
 
     public CommonData.PlayerID playerID;    //玩家标识符
     public CommonData.Camps localCamp;      
+
+
+    public void InitCard(CampInfo campInfo)
+    {
+        Debug.Log("playerItem");
+        if (campInfo != null)
+        {
+            foreach (CardMsg it in campInfo.CardItems)
+            {
+                Debug.Log("prefab" + it.BornPos);
+
+                int bornPos = it.BornPos;
+
+                GameObject card = Instantiate(cardItem, items[bornPos].transform.position, Quaternion.identity);
+                card.transform.parent = items[bornPos].transform;
+                card.transform.localPosition = Vector3.zero;
+
+                Debug.Log("prefab" + campInfo.CardItems.Count);
+
+                /*items[bornPos].GetComponentInChildren<Card>().atk = it.Atk;
+                items[bornPos].GetComponentInChildren<Card>().maxHp = it.MaxHp;
+                items[bornPos].GetComponentInChildren<Card>().def = it.Def;
+                items[bornPos].GetComponentInChildren<Card>().speed = it.Speed;
+                items[bornPos].GetComponentInChildren<Card>().bornPos = it.BornPos;*/
+            }
+        }
+    }
 
 
     /// <summary>
