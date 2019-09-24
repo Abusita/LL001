@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using CsProtobuf;
 
-
-public class playerItems : MonoBehaviour {
-
+public class enemyItems : MonoBehaviour {
 
     public GameObject cardItem;             //卡牌Prefab
     public GameObject[] items;              //站位
@@ -26,11 +24,6 @@ public class playerItems : MonoBehaviour {
                 card.transform.parent = items[bornPos].transform;
                 card.transform.localPosition = Vector3.zero;
 
-                /*items[bornPos].GetComponentInChildren<Card>().atk = it.Atk;
-                items[bornPos].GetComponentInChildren<Card>().maxHp = it.MaxHp;
-                items[bornPos].GetComponentInChildren<Card>().def = it.Def;
-                items[bornPos].GetComponentInChildren<Card>().speed = it.Speed;
-                items[bornPos].GetComponentInChildren<Card>().bornPos = it.BornPos;*/
             }
         }
     }
@@ -47,7 +40,7 @@ public class playerItems : MonoBehaviour {
     /// <param name="msg"></param>
     public void MsgHandle(MsgPackage msg)
     {
-        if ((msg.initItemsPack != null)&&(msg.initItemsPack.cardItems != null))
+        if ((msg.initItemsPack != null) && (msg.initItemsPack.cardItems != null))
         {
             foreach (Card it in msg.initItemsPack.cardItems)
             {
@@ -85,13 +78,13 @@ public class playerItems : MonoBehaviour {
         }
     }
 
-	// Use this for initialization
-	void Start () {
-
+    // Use this for initialization
+    void Start()
+    {
     }
-	
-	// Update is called once per frame
-	void Update () {
 
+    // Update is called once per frame
+    void Update()
+    {
     }
 }

@@ -17,15 +17,17 @@ public class ProtoControl : MonoBehaviour {
     private  BattleControl battleControlCS;
 
     private  byte[] result = new byte[1024];
-    private  Socket clientSocket;
 
     private  IEnumerator resciveCor;
+    private bool isRecMsg;
+    private MsgPack msg;
+    public static Socket clientSocket;
 
     void ConnectToSever()
     {
         //设定服务器IP地址 
         IPAddress ip = IPAddress.Parse("127.0.0.1");
-        Socket clientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+        clientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
         try
         {
             clientSocket.Connect(new IPEndPoint(ip, 8885)); //配置服务器IP与端口 
@@ -38,19 +40,20 @@ public class ProtoControl : MonoBehaviour {
         }
 
         //开始监听
-        //Thread resciveTr = new Thread(ResciveMsg);
-        //resciveTr.Start(clientSocket);
+        Thread resciveTr = new Thread(ResciveMsg);
+        resciveTr.Start(clientSocket);
         //Thread sendTr = new Thread(SendMessage);
         //sendTr.Start(clientSocket);
 
-        resciveCor = WaitAndPrint(0.2f, clientSocket);
-        StartCoroutine(resciveCor);
+        //resciveCor = WaitAndPrint(0.2f, clientSocket);
+        //StartCoroutine(resciveCor);
 
     }
 
 
     private IEnumerator WaitAndPrint(float waitTime, object clientSocket)
     {
+        Debug.Log("IEnum");
         while (true)
         {
             Socket myClientSocket = (Socket)clientSocket;
@@ -63,21 +66,32 @@ public class ProtoControl : MonoBehaviour {
             {
                 break;
             }
-            var message = ProtoSerialize.Deserialize<MsgPack>(resultBuffer);
+            msg = ProtoSerialize.Deserialize<MsgPack>(resultBuffer);
+            MsgHandle.ReceiveMsgList.Enqueue(msg);
 
-            foreach (CampInfo item in message.InitItemPack.CampInfos)
-            {
-                Debug.Log(item.Camp);
-                Debug.Log(item.ItemsCount);
-                foreach (CardMsg c in item.CardItems)
+            //isRecMsg = true;
+            /*foreach (CampInfo item in msg.InitItemPack.CampInfos)
                 {
-                    Debug.Log("c.Id: " + c.Id + "  c.BornPos:" + c.BornPos);
-                }
-            }
+                    Debug.Log(item.Camp);
+                    Debug.Log(item.ItemsCount);
+                    foreach (CardMsg c in item.CardItems)
+                    {
+                        Debug.Log("c.Id: " + c.Id + "  c.BornPos:" + c.BornPos);
+                    }
+                }*/
 
-            battleControlCS.InitScene(message);
+            //battleControlCS.InitScene(message);
             yield return new WaitForSeconds(waitTime);
         }
+        
+    }
+
+
+    public static void SendMsg(MsgPack msg)
+    {
+        var m = ProtoSerialize.Serialize<MsgPack>(msg);
+        clientSocket.Send(m);
+
     }
 
     void ResciveMsg(object clientSocket)
@@ -85,66 +99,28 @@ public class ProtoControl : MonoBehaviour {
         while (true)
         {
             Socket myClientSocket = (Socket)clientSocket;
-            byte[] tempBuffer = new byte[1024 * 1024 * 2];
-            var effective = myClientSocket.Receive(tempBuffer);
-            byte[] resultBuffer = new byte[effective];
-
-            Array.Copy(tempBuffer, 0, resultBuffer, 0, effective); 
-            if (effective == 0)
+            try
             {
-                break;
-            }
-            var message = ProtoSerialize.Deserialize<MsgPack>(resultBuffer);
+                byte[] tempBuffer = new byte[1024 * 1024 * 2];
+                var effective = myClientSocket.Receive(tempBuffer);
+                byte[] resultBuffer = new byte[effective];
 
-            foreach (CampInfo item in message.InitItemPack.CampInfos)
-            {
-                Debug.Log(item.Camp);
-                Debug.Log(item.ItemsCount);
-                foreach (CardMsg c in item.CardItems)
+                Array.Copy(tempBuffer, 0, resultBuffer, 0, effective);
+                if (effective == 0)
                 {
-                    Debug.Log("c.Id: " + c.Id + "  c.BornPos:" + c.BornPos);
+                    break;
                 }
+                msg = ProtoSerialize.Deserialize<MsgPack>(resultBuffer);
+                MsgHandle.ReceiveMsgList.Enqueue(msg);
             }
-
-            battleControlCS.InitScene(message);
-        }
-
-
-        /*while (true)
-        {
-            Thread.Sleep(500);    //等待1秒钟 
-            Socket myClientSocket = (Socket)clientSocket;
-            int receiveLength = myClientSocket.Receive(result);
-            Debug.Log("接收服务器消息：" + Encoding.ASCII.GetString(result, 0, receiveLength));
-        }*/
-
-        /*while (true)
-        {
-            Socket myClientSocket = (Socket)clientSocket;
-            //int receiveLength = myClientSocket.Receive(result);
-
-            //Debug.Log("接收数据");
-            //Debug.Log(Encoding.ASCII.GetString(result));
-            //将字节数据的数据还原到对象中
-            //IMessage IMperson = new TestForProto();
-            //TestForProto toClient = (TestForProto)IMperson.Descriptor.Parser.ParseFrom(result);
-
-            byte[] buffer = new byte[1024 * 1024 * 2];
-            var effective = myClientSocket.Receive(buffer);
-            byte[] b2 = new byte[effective];
-            Array.Copy(buffer, 0, b2, 0, effective); // 把数据拷贝给b2
-            if (effective == 0)
+            catch (Exception ex)
             {
+                Console.WriteLine(ex.Message);
+                myClientSocket.Shutdown(SocketShutdown.Both);
+                myClientSocket.Close();
                 break;
             }
-            var message = ProtoSerialize.Deserialize<TestForProto>(b2); // 解析时候必须为正确的长度
-
-
-            Debug.Log(message.Name);
-            Debug.Log(message.Age);
-            for (int i = 0; i < message.Pos.Count; i++)
-                Debug.Log(message.Pos[i]);
-        }*/
+        }
 
     }
 
@@ -195,14 +171,23 @@ public class ProtoControl : MonoBehaviour {
     // Use this for initialization
     void Start()
     {
-        
         battleControl = GameObject.Find("BattleControl");
         battleControlCS = battleControl.GetComponent<BattleControl>();
+        isRecMsg = false;
+        msg = new MsgPack();
+
+
         ConnectToSever();
     }
-	
-	// Update is called once per frame
-	void Update () {
-		
+
+    // Update is called once per frame
+    void Update()
+    {
+        
+        /*if (isRecMsg)
+        {
+            battleControlCS.InitScene(msg);
+            isRecMsg = false;
+        }*/
 	}
 }

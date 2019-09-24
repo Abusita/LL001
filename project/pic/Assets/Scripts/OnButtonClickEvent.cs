@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using CsProtobuf;
+
 
 public class OnButtonClickEvent : MonoBehaviour {
 
@@ -10,7 +12,13 @@ public class OnButtonClickEvent : MonoBehaviour {
     /// </summary>
     public void OnButtonInit()
     {
-        GameObject.Find("BattleControl").GetComponent<BattleControl>().Init();
+        //GameObject.Find("BattleControl").GetComponent<BattleControl>().Init();
+
+        MsgPack msg = new MsgPack();
+        msg.MsgType = MsgType.CsInitbattlesceneReq;
+        msg.MsgFrom = MsgHandle.playerID;
+        msg.MsgTo = PlayerID.CsServe;
+        MsgHandle.SendMsgList.Enqueue(msg);
     }
 
     /// <summary>

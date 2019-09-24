@@ -23,20 +23,24 @@ namespace CsProtobuf {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
             "Cgxjc19tc2cucHJvdG8SC2NzX3Byb3RvYnVmGh1nb29nbGUvcHJvdG9idWYv",
-            "Y3NfZW51bS5wcm90byI6CgdNc2dQYWNrEi8KDGluaXRJdGVtUGFjaxgBIAEo",
-            "CzIZLmNzX3Byb3RvYnVmLkluaXRJdGVtUGFjayJuCgdDYXJkTXNnEg0KBW1h",
-            "eEhwGAIgASgCEgsKA2F0axgDIAEoAhILCgNkZWYYBCABKAISDQoFc3BlZWQY",
-            "BSABKAISCgoCaWQYBiABKAUSDgoGaXNCb3JuGAcgASgIEg8KB2Jvcm5Qb3MY",
-            "CCABKAUiaQoIQ2FtcEluZm8SIAoEY2FtcBgJIAEoDjISLmNzX3Byb3RvYnVm",
-            "LkNhbXBzEhIKCml0ZW1zQ291bnQYCiABKAUSJwoJY2FyZEl0ZW1zGAsgAygL",
-            "MhQuY3NfcHJvdG9idWYuQ2FyZE1zZyI4CgxJbml0SXRlbVBhY2sSKAoJY2Ft",
-            "cEluZm9zGAwgAygLMhUuY3NfcHJvdG9idWYuQ2FtcEluZm9iBnByb3RvMw=="));
+            "Y3NfZW51bS5wcm90byKvAQoHTXNnUGFjaxIlCgdtc2dUeXBlGAEgASgOMhQu",
+            "Y3NfcHJvdG9idWYuTXNnVHlwZRImCgdtc2dGcm9tGAIgASgOMhUuY3NfcHJv",
+            "dG9idWYuUGxheWVySUQSJAoFbXNnVG8YAyABKA4yFS5jc19wcm90b2J1Zi5Q",
+            "bGF5ZXJJRBIvCgxpbml0SXRlbVBhY2sYBCABKAsyGS5jc19wcm90b2J1Zi5J",
+            "bml0SXRlbVBhY2sibgoHQ2FyZE1zZxINCgVtYXhIcBgBIAEoAhILCgNhdGsY",
+            "AiABKAISCwoDZGVmGAMgASgCEg0KBXNwZWVkGAQgASgCEgoKAmlkGAUgASgF",
+            "Eg4KBmlzQm9ybhgGIAEoCBIPCgdib3JuUG9zGAcgASgFIpIBCghDYW1wSW5m",
+            "bxInCghwbGF5ZXJJRBgBIAEoDjIVLmNzX3Byb3RvYnVmLlBsYXllcklEEiAK",
+            "BGNhbXAYAiABKA4yEi5jc19wcm90b2J1Zi5DYW1wcxISCgppdGVtc0NvdW50",
+            "GAMgASgFEicKCWNhcmRJdGVtcxgEIAMoCzIULmNzX3Byb3RvYnVmLkNhcmRN",
+            "c2ciOAoMSW5pdEl0ZW1QYWNrEigKCWNhbXBJbmZvcxgBIAMoCzIVLmNzX3By",
+            "b3RvYnVmLkNhbXBJbmZvYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::CsProtobuf.CsEnumReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::CsProtobuf.MsgPack), global::CsProtobuf.MsgPack.Parser, new[]{ "InitItemPack" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::CsProtobuf.MsgPack), global::CsProtobuf.MsgPack.Parser, new[]{ "MsgType", "MsgFrom", "MsgTo", "InitItemPack" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::CsProtobuf.CardMsg), global::CsProtobuf.CardMsg.Parser, new[]{ "MaxHp", "Atk", "Def", "Speed", "Id", "IsBorn", "BornPos" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::CsProtobuf.CampInfo), global::CsProtobuf.CampInfo.Parser, new[]{ "Camp", "ItemsCount", "CardItems" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::CsProtobuf.CampInfo), global::CsProtobuf.CampInfo.Parser, new[]{ "PlayerID", "Camp", "ItemsCount", "CardItems" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::CsProtobuf.InitItemPack), global::CsProtobuf.InitItemPack.Parser, new[]{ "CampInfos" }, null, null, null)
           }));
     }
@@ -68,6 +72,9 @@ namespace CsProtobuf {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public MsgPack(MsgPack other) : this() {
+      msgType_ = other.msgType_;
+      msgFrom_ = other.msgFrom_;
+      msgTo_ = other.msgTo_;
       InitItemPack = other.initItemPack_ != null ? other.InitItemPack.Clone() : null;
     }
 
@@ -76,8 +83,41 @@ namespace CsProtobuf {
       return new MsgPack(this);
     }
 
+    /// <summary>Field number for the "msgType" field.</summary>
+    public const int MsgTypeFieldNumber = 1;
+    private global::CsProtobuf.MsgType msgType_ = 0;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::CsProtobuf.MsgType MsgType {
+      get { return msgType_; }
+      set {
+        msgType_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "msgFrom" field.</summary>
+    public const int MsgFromFieldNumber = 2;
+    private global::CsProtobuf.PlayerID msgFrom_ = 0;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::CsProtobuf.PlayerID MsgFrom {
+      get { return msgFrom_; }
+      set {
+        msgFrom_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "msgTo" field.</summary>
+    public const int MsgToFieldNumber = 3;
+    private global::CsProtobuf.PlayerID msgTo_ = 0;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::CsProtobuf.PlayerID MsgTo {
+      get { return msgTo_; }
+      set {
+        msgTo_ = value;
+      }
+    }
+
     /// <summary>Field number for the "initItemPack" field.</summary>
-    public const int InitItemPackFieldNumber = 1;
+    public const int InitItemPackFieldNumber = 4;
     private global::CsProtobuf.InitItemPack initItemPack_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public global::CsProtobuf.InitItemPack InitItemPack {
@@ -100,6 +140,9 @@ namespace CsProtobuf {
       if (ReferenceEquals(other, this)) {
         return true;
       }
+      if (MsgType != other.MsgType) return false;
+      if (MsgFrom != other.MsgFrom) return false;
+      if (MsgTo != other.MsgTo) return false;
       if (!object.Equals(InitItemPack, other.InitItemPack)) return false;
       return true;
     }
@@ -107,6 +150,9 @@ namespace CsProtobuf {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
+      if (MsgType != 0) hash ^= MsgType.GetHashCode();
+      if (MsgFrom != 0) hash ^= MsgFrom.GetHashCode();
+      if (MsgTo != 0) hash ^= MsgTo.GetHashCode();
       if (initItemPack_ != null) hash ^= InitItemPack.GetHashCode();
       return hash;
     }
@@ -118,8 +164,20 @@ namespace CsProtobuf {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void WriteTo(pb::CodedOutputStream output) {
+      if (MsgType != 0) {
+        output.WriteRawTag(8);
+        output.WriteEnum((int) MsgType);
+      }
+      if (MsgFrom != 0) {
+        output.WriteRawTag(16);
+        output.WriteEnum((int) MsgFrom);
+      }
+      if (MsgTo != 0) {
+        output.WriteRawTag(24);
+        output.WriteEnum((int) MsgTo);
+      }
       if (initItemPack_ != null) {
-        output.WriteRawTag(10);
+        output.WriteRawTag(34);
         output.WriteMessage(InitItemPack);
       }
     }
@@ -127,6 +185,15 @@ namespace CsProtobuf {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
+      if (MsgType != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) MsgType);
+      }
+      if (MsgFrom != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) MsgFrom);
+      }
+      if (MsgTo != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) MsgTo);
+      }
       if (initItemPack_ != null) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(InitItemPack);
       }
@@ -137,6 +204,15 @@ namespace CsProtobuf {
     public void MergeFrom(MsgPack other) {
       if (other == null) {
         return;
+      }
+      if (other.MsgType != 0) {
+        MsgType = other.MsgType;
+      }
+      if (other.MsgFrom != 0) {
+        MsgFrom = other.MsgFrom;
+      }
+      if (other.MsgTo != 0) {
+        MsgTo = other.MsgTo;
       }
       if (other.initItemPack_ != null) {
         if (initItemPack_ == null) {
@@ -154,7 +230,19 @@ namespace CsProtobuf {
           default:
             input.SkipLastField();
             break;
-          case 10: {
+          case 8: {
+            msgType_ = (global::CsProtobuf.MsgType) input.ReadEnum();
+            break;
+          }
+          case 16: {
+            msgFrom_ = (global::CsProtobuf.PlayerID) input.ReadEnum();
+            break;
+          }
+          case 24: {
+            msgTo_ = (global::CsProtobuf.PlayerID) input.ReadEnum();
+            break;
+          }
+          case 34: {
             if (initItemPack_ == null) {
               initItemPack_ = new global::CsProtobuf.InitItemPack();
             }
@@ -209,7 +297,7 @@ namespace CsProtobuf {
     }
 
     /// <summary>Field number for the "maxHp" field.</summary>
-    public const int MaxHpFieldNumber = 2;
+    public const int MaxHpFieldNumber = 1;
     private float maxHp_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public float MaxHp {
@@ -220,7 +308,7 @@ namespace CsProtobuf {
     }
 
     /// <summary>Field number for the "atk" field.</summary>
-    public const int AtkFieldNumber = 3;
+    public const int AtkFieldNumber = 2;
     private float atk_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public float Atk {
@@ -231,7 +319,7 @@ namespace CsProtobuf {
     }
 
     /// <summary>Field number for the "def" field.</summary>
-    public const int DefFieldNumber = 4;
+    public const int DefFieldNumber = 3;
     private float def_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public float Def {
@@ -242,7 +330,7 @@ namespace CsProtobuf {
     }
 
     /// <summary>Field number for the "speed" field.</summary>
-    public const int SpeedFieldNumber = 5;
+    public const int SpeedFieldNumber = 4;
     private float speed_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public float Speed {
@@ -253,7 +341,7 @@ namespace CsProtobuf {
     }
 
     /// <summary>Field number for the "id" field.</summary>
-    public const int IdFieldNumber = 6;
+    public const int IdFieldNumber = 5;
     private int id_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int Id {
@@ -264,7 +352,7 @@ namespace CsProtobuf {
     }
 
     /// <summary>Field number for the "isBorn" field.</summary>
-    public const int IsBornFieldNumber = 7;
+    public const int IsBornFieldNumber = 6;
     private bool isBorn_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public bool IsBorn {
@@ -275,7 +363,7 @@ namespace CsProtobuf {
     }
 
     /// <summary>Field number for the "bornPos" field.</summary>
-    public const int BornPosFieldNumber = 8;
+    public const int BornPosFieldNumber = 7;
     private int bornPos_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int BornPos {
@@ -329,31 +417,31 @@ namespace CsProtobuf {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void WriteTo(pb::CodedOutputStream output) {
       if (MaxHp != 0F) {
-        output.WriteRawTag(21);
+        output.WriteRawTag(13);
         output.WriteFloat(MaxHp);
       }
       if (Atk != 0F) {
-        output.WriteRawTag(29);
+        output.WriteRawTag(21);
         output.WriteFloat(Atk);
       }
       if (Def != 0F) {
-        output.WriteRawTag(37);
+        output.WriteRawTag(29);
         output.WriteFloat(Def);
       }
       if (Speed != 0F) {
-        output.WriteRawTag(45);
+        output.WriteRawTag(37);
         output.WriteFloat(Speed);
       }
       if (Id != 0) {
-        output.WriteRawTag(48);
+        output.WriteRawTag(40);
         output.WriteInt32(Id);
       }
       if (IsBorn != false) {
-        output.WriteRawTag(56);
+        output.WriteRawTag(48);
         output.WriteBool(IsBorn);
       }
       if (BornPos != 0) {
-        output.WriteRawTag(64);
+        output.WriteRawTag(56);
         output.WriteInt32(BornPos);
       }
     }
@@ -421,31 +509,31 @@ namespace CsProtobuf {
           default:
             input.SkipLastField();
             break;
-          case 21: {
+          case 13: {
             MaxHp = input.ReadFloat();
             break;
           }
-          case 29: {
+          case 21: {
             Atk = input.ReadFloat();
             break;
           }
-          case 37: {
+          case 29: {
             Def = input.ReadFloat();
             break;
           }
-          case 45: {
+          case 37: {
             Speed = input.ReadFloat();
             break;
           }
-          case 48: {
+          case 40: {
             Id = input.ReadInt32();
             break;
           }
-          case 56: {
+          case 48: {
             IsBorn = input.ReadBool();
             break;
           }
-          case 64: {
+          case 56: {
             BornPos = input.ReadInt32();
             break;
           }
@@ -482,6 +570,7 @@ namespace CsProtobuf {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public CampInfo(CampInfo other) : this() {
+      playerID_ = other.playerID_;
       camp_ = other.camp_;
       itemsCount_ = other.itemsCount_;
       cardItems_ = other.cardItems_.Clone();
@@ -492,8 +581,22 @@ namespace CsProtobuf {
       return new CampInfo(this);
     }
 
+    /// <summary>Field number for the "playerID" field.</summary>
+    public const int PlayerIDFieldNumber = 1;
+    private global::CsProtobuf.PlayerID playerID_ = 0;
+    /// <summary>
+    ///身份
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::CsProtobuf.PlayerID PlayerID {
+      get { return playerID_; }
+      set {
+        playerID_ = value;
+      }
+    }
+
     /// <summary>Field number for the "camp" field.</summary>
-    public const int CampFieldNumber = 9;
+    public const int CampFieldNumber = 2;
     private global::CsProtobuf.Camps camp_ = 0;
     /// <summary>
     ///对战阵营
@@ -507,7 +610,7 @@ namespace CsProtobuf {
     }
 
     /// <summary>Field number for the "itemsCount" field.</summary>
-    public const int ItemsCountFieldNumber = 10;
+    public const int ItemsCountFieldNumber = 3;
     private int itemsCount_;
     /// <summary>
     ///卡牌数量
@@ -521,9 +624,9 @@ namespace CsProtobuf {
     }
 
     /// <summary>Field number for the "cardItems" field.</summary>
-    public const int CardItemsFieldNumber = 11;
+    public const int CardItemsFieldNumber = 4;
     private static readonly pb::FieldCodec<global::CsProtobuf.CardMsg> _repeated_cardItems_codec
-        = pb::FieldCodec.ForMessage(90, global::CsProtobuf.CardMsg.Parser);
+        = pb::FieldCodec.ForMessage(34, global::CsProtobuf.CardMsg.Parser);
     private readonly pbc::RepeatedField<global::CsProtobuf.CardMsg> cardItems_ = new pbc::RepeatedField<global::CsProtobuf.CardMsg>();
     /// <summary>
     ///卡牌数组
@@ -546,6 +649,7 @@ namespace CsProtobuf {
       if (ReferenceEquals(other, this)) {
         return true;
       }
+      if (PlayerID != other.PlayerID) return false;
       if (Camp != other.Camp) return false;
       if (ItemsCount != other.ItemsCount) return false;
       if(!cardItems_.Equals(other.cardItems_)) return false;
@@ -555,6 +659,7 @@ namespace CsProtobuf {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
+      if (PlayerID != 0) hash ^= PlayerID.GetHashCode();
       if (Camp != 0) hash ^= Camp.GetHashCode();
       if (ItemsCount != 0) hash ^= ItemsCount.GetHashCode();
       hash ^= cardItems_.GetHashCode();
@@ -568,12 +673,16 @@ namespace CsProtobuf {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void WriteTo(pb::CodedOutputStream output) {
+      if (PlayerID != 0) {
+        output.WriteRawTag(8);
+        output.WriteEnum((int) PlayerID);
+      }
       if (Camp != 0) {
-        output.WriteRawTag(72);
+        output.WriteRawTag(16);
         output.WriteEnum((int) Camp);
       }
       if (ItemsCount != 0) {
-        output.WriteRawTag(80);
+        output.WriteRawTag(24);
         output.WriteInt32(ItemsCount);
       }
       cardItems_.WriteTo(output, _repeated_cardItems_codec);
@@ -582,6 +691,9 @@ namespace CsProtobuf {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
+      if (PlayerID != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) PlayerID);
+      }
       if (Camp != 0) {
         size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) Camp);
       }
@@ -596,6 +708,9 @@ namespace CsProtobuf {
     public void MergeFrom(CampInfo other) {
       if (other == null) {
         return;
+      }
+      if (other.PlayerID != 0) {
+        PlayerID = other.PlayerID;
       }
       if (other.Camp != 0) {
         Camp = other.Camp;
@@ -614,15 +729,19 @@ namespace CsProtobuf {
           default:
             input.SkipLastField();
             break;
-          case 72: {
+          case 8: {
+            playerID_ = (global::CsProtobuf.PlayerID) input.ReadEnum();
+            break;
+          }
+          case 16: {
             camp_ = (global::CsProtobuf.Camps) input.ReadEnum();
             break;
           }
-          case 80: {
+          case 24: {
             ItemsCount = input.ReadInt32();
             break;
           }
-          case 90: {
+          case 34: {
             cardItems_.AddEntriesFrom(input, _repeated_cardItems_codec);
             break;
           }
@@ -665,9 +784,9 @@ namespace CsProtobuf {
     }
 
     /// <summary>Field number for the "campInfos" field.</summary>
-    public const int CampInfosFieldNumber = 12;
+    public const int CampInfosFieldNumber = 1;
     private static readonly pb::FieldCodec<global::CsProtobuf.CampInfo> _repeated_campInfos_codec
-        = pb::FieldCodec.ForMessage(98, global::CsProtobuf.CampInfo.Parser);
+        = pb::FieldCodec.ForMessage(10, global::CsProtobuf.CampInfo.Parser);
     private readonly pbc::RepeatedField<global::CsProtobuf.CampInfo> campInfos_ = new pbc::RepeatedField<global::CsProtobuf.CampInfo>();
     /// <summary>
     ///阵营列表
@@ -734,7 +853,7 @@ namespace CsProtobuf {
           default:
             input.SkipLastField();
             break;
-          case 98: {
+          case 10: {
             campInfos_.AddEntriesFrom(input, _repeated_campInfos_codec);
             break;
           }

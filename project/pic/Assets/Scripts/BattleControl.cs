@@ -6,8 +6,8 @@ using CsProtobuf;
 public class BattleControl : MonoBehaviour {
 
     public GameObject[] Groups = null;
-
     private List<playerItems> campCS;
+
 
     //临时数据
     int maxGroups = 2;
@@ -108,12 +108,14 @@ public class BattleControl : MonoBehaviour {
 
     public void InitScene(MsgPack msg)
     {
-        Debug.Log("battleControl");
         if(msg.InitItemPack != null)
         {
             foreach(var item in msg.InitItemPack.CampInfos)
             {
-                campCS[(int)item.Camp].InitCard(item);
+                if(item.Camp == Camps.CsCampPlayer)
+                    Groups[(int)item.Camp].GetComponent<playerItems>().InitCard(item);
+                if (item.Camp == Camps.CsCampEnemy)
+                    Groups[(int)item.Camp].GetComponent<enemyItems>().InitCard(item);
             }
         }
     }
@@ -310,10 +312,8 @@ public class BattleControl : MonoBehaviour {
     /// </summary>
     public void ReSet()
     {
-        for (int i = 0; i < maxGroups; i++)
-        {
-            Groups[i].GetComponent<playerItems>().ReSet();
-        }
+        Groups[0].GetComponent<playerItems>().ReSet();
+        Groups[1].GetComponent<enemyItems>().ReSet();
     }
 
 	// Use this for initialization
@@ -324,7 +324,9 @@ public class BattleControl : MonoBehaviour {
             playerItems group = new playerItems();
             campCS.Add(group);
         }
-	}
+
+        DelegateManager.UpdateBattleSceneEvent += InitScene;
+    }
 	
 	// Update is called once per frame
 	void Update () {

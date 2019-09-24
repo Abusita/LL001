@@ -24,17 +24,22 @@ namespace CsProtobuf {
           string.Concat(
             "Cg1jc19lbnVtLnByb3RvEgtjc19wcm90b2J1ZipFCghFbm1DbWRJRBITCg9D",
             "U19MT0dJTl9VTlVTRUQQABIRCgxDU19MT0dJTl9SRVEQkU4SEQoMQ1NfTE9H",
-            "SU5fUkVTEJJOKoABCghQbGF5ZXJJRBIRCg1DU19QTEFZRVJfT05FEAASEQoN",
+            "SU5fUkVTEJJOKsQBCghQbGF5ZXJJRBIRCg1DU19QTEFZRVJfT05FEAASEQoN",
             "Q1NfUExBWUVSX1RXTxABEhMKD0NTX1BMQVlFUl9USFJFRRACEhIKDkNTX1BM",
             "QVlFUl9GT1VSEAMSEgoOQ1NfUExBWUVSX0ZJVkUQBBIRCg1DU19QTEFZRVJf",
-            "U0lYEAUqVwoNQ2FyZEF0dHJpYnV0ZRIRCg1DU19DQVJEX01BWEhQEAASDwoL",
-            "Q1NfQ0FSRF9BVEsQARIPCgtDU19DQVJEX0RFRhACEhEKDUNTX0NBUkRfU1BF",
-            "RUQQAyozCgdBdGtUeXBlEhIKDkNTX0FUS1RZUEVfQVRLEAASFAoQQ1NfQVRL",
-            "VFlQRV9TS0lMTBABKi4KBUNhbXBzEhIKDkNTX0NBTVBfUExBWUVSEAASEQoN",
-            "Q1NfQ0FNUF9FTkVNWRABYgZwcm90bzM="));
+            "U0lYEAUSEAoMQ1NfRU5FTVlfT05FEAYSEAoMQ1NfRU5FTVlfVFdPEAcSDAoI",
+            "Q1NfU0VSVkUQYhIQCgxDU19VTkRFRklORUQQYypXCg1DYXJkQXR0cmlidXRl",
+            "EhEKDUNTX0NBUkRfTUFYSFAQABIPCgtDU19DQVJEX0FUSxABEg8KC0NTX0NB",
+            "UkRfREVGEAISEQoNQ1NfQ0FSRF9TUEVFRBADKjMKB0F0a1R5cGUSEgoOQ1Nf",
+            "QVRLVFlQRV9BVEsQABIUChBDU19BVEtUWVBFX1NLSUxMEAEqLgoFQ2FtcHMS",
+            "EgoOQ1NfQ0FNUF9QTEFZRVIQABIRCg1DU19DQU1QX0VORU1ZEAEqiAEKB01z",
+            "Z1R5cGUSFQoRQ1NfRklSU1RfSEFORF9NU0cQABIaChZDU19JTklUQkFUVExF",
+            "U0NFTkVfUkVREAESGgoWQ1NfSU5JVEJBVFRMRVNDRU5FX1JFUxACEhYKEkNT",
+            "X0JBVFRMRVNUQVJUX1JFURADEhYKEkNTX0JBVFRMRVNUQVJUX1JFUxAEYgZw",
+            "cm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
-          new pbr::GeneratedClrTypeInfo(new[] {typeof(global::CsProtobuf.EnmCmdID), typeof(global::CsProtobuf.PlayerID), typeof(global::CsProtobuf.CardAttribute), typeof(global::CsProtobuf.AtkType), typeof(global::CsProtobuf.Camps), }, null));
+          new pbr::GeneratedClrTypeInfo(new[] {typeof(global::CsProtobuf.EnmCmdID), typeof(global::CsProtobuf.PlayerID), typeof(global::CsProtobuf.CardAttribute), typeof(global::CsProtobuf.AtkType), typeof(global::CsProtobuf.Camps), typeof(global::CsProtobuf.MsgType), }, null));
     }
     #endregion
 
@@ -56,7 +61,7 @@ namespace CsProtobuf {
   }
 
   /// <summary>
-  ///玩家唯一标识符
+  ///身份标识符
   /// </summary>
   public enum PlayerID {
     /// <summary>
@@ -68,6 +73,13 @@ namespace CsProtobuf {
     [pbr::OriginalName("CS_PLAYER_FOUR")] CsPlayerFour = 3,
     [pbr::OriginalName("CS_PLAYER_FIVE")] CsPlayerFive = 4,
     [pbr::OriginalName("CS_PLAYER_SIX")] CsPlayerSix = 5,
+    [pbr::OriginalName("CS_ENEMY_ONE")] CsEnemyOne = 6,
+    [pbr::OriginalName("CS_ENEMY_TWO")] CsEnemyTwo = 7,
+    /// <summary>
+    ///服务器
+    /// </summary>
+    [pbr::OriginalName("CS_SERVE")] CsServe = 98,
+    [pbr::OriginalName("CS_UNDEFINED")] CsUndefined = 99,
   }
 
   /// <summary>
@@ -100,6 +112,17 @@ namespace CsProtobuf {
   public enum Camps {
     [pbr::OriginalName("CS_CAMP_PLAYER")] CsCampPlayer = 0,
     [pbr::OriginalName("CS_CAMP_ENEMY")] CsCampEnemy = 1,
+  }
+
+  /// <summary>
+  ///消息类型枚举
+  /// </summary>
+  public enum MsgType {
+    [pbr::OriginalName("CS_FIRST_HAND_MSG")] CsFirstHandMsg = 0,
+    [pbr::OriginalName("CS_INITBATTLESCENE_REQ")] CsInitbattlesceneReq = 1,
+    [pbr::OriginalName("CS_INITBATTLESCENE_RES")] CsInitbattlesceneRes = 2,
+    [pbr::OriginalName("CS_BATTLESTART_REQ")] CsBattlestartReq = 3,
+    [pbr::OriginalName("CS_BATTLESTART_RES")] CsBattlestartRes = 4,
   }
 
   #endregion

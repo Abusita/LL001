@@ -19,7 +19,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4783421882723076}
-  - component: {fileID: 114345023594147090}
+  - component: {fileID: 114191487692674000}
   m_Layer: 0
   m_Name: enemyItems
   m_TagString: Untagged
@@ -302,7 +302,7 @@ Transform:
   m_Father: {fileID: 4783421882723076}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &114345023594147090
+--- !u!114 &114191487692674000
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -310,7 +310,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1083616577720936}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bd3413465a68ca043b7899d7ac99938b, type: 3}
+  m_Script: {fileID: 11500000, guid: cc71e6d324d2c4b45a5df1583a28da64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   cardItem: {fileID: 1501783261194280, guid: dfdd70c17222f444bbc055b465c4e23e, type: 2}
@@ -324,7 +324,7 @@ MonoBehaviour:
   - {fileID: 1954780707440982}
   - {fileID: 1641230067201148}
   playerID: 0
-  localCamp: 0
+  localCamp: 1
 --- !u!212 &212208218912785722
 SpriteRenderer:
   m_ObjectHideFlags: 1
