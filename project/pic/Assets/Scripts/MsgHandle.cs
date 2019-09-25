@@ -27,6 +27,7 @@ public class MsgHandle : MonoBehaviour {
             {
                 case MsgType.CsFirstHandMsg:
                     playerID = msg.MsgTo;
+                    Debug.Log(playerID);
                     break;
                 case MsgType.CsInitbattlesceneRes:
                     DelegateManager.OnUpdateBattleSceneEvent(msg);
@@ -39,6 +40,7 @@ public class MsgHandle : MonoBehaviour {
         {
             MsgPack msg = SendMsgList.Dequeue();
             ProtoControl.SendMsg(msg);
+            
         }
     }
 }

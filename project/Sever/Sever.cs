@@ -21,6 +21,8 @@ namespace Sever
 
         public static Queue<MsgPack> receiveMsgList = new Queue<MsgPack>();
         public static Queue<MsgPack> sendMsgList = new Queue<MsgPack>();
+        public static Dictionary<PlayerID, Socket> clientDict = new Dictionary<PlayerID, Socket>();
+        
 
         /// <summary>
         /// 监听事件
@@ -31,14 +33,16 @@ namespace Sever
             {
                 Socket clientSocket = serverSocket.Accept();
 
-                //设置客户端身份,并回执
+                //接收客户端连接请求,并回执
                 MsgPack msgPack = new MsgPack();
                 msgPack.MsgType = MsgType.CsFirstHandMsg;
                 msgPack.MsgFrom = PlayerID.CsServe;
-                msgPack.MsgTo = PlayerID.CsPlayerOne;
+                msgPack.MsgTo = (PlayerID)clientDict.Count;
                 var serMsgPack = ProtoSerialize.Serialize<MsgPack>(msgPack);
                 clientSocket.Send(serMsgPack);
-
+                
+                clientDict.Add((PlayerID)clientDict.Count, clientSocket);
+                Console.WriteLine("connect to client: " + clientDict.Count);
 
                 Thread receiveThread = new Thread(ReceiveMessage);
                 receiveThread.Start(clientSocket);
@@ -56,14 +60,16 @@ namespace Sever
         {
             while (true)
             {
-                if (receiveMsgList.Count != 0)
+                if (receiveMsgList.Count > 0)
                 {
                     MsgPack sm = receiveMsgList.Dequeue();
 
                     switch (sm.MsgType)
                     {
                         case MsgType.CsInitbattlesceneReq:
-                            MsgPack m = InitData();
+                            MsgPack m = InitData();                      
+                            m.MsgTo = sm.MsgFrom;
+                            Console.WriteLine("MsgTo: " + m.MsgTo);
                             sendMsgList.Enqueue(m);
                             break;
                         case MsgType.CsBattlestartReq:
@@ -135,30 +141,38 @@ namespace Sever
         /// <param name="clientSocket"></param>
         private static void ReceiveMessage(object clientSocket)
         {
-            Socket myClientSocket = (Socket)clientSocket;
+            Socket myClientSocket = null;
+            //Socket myClientSocket = (Socket)clientSocket;
             while (true)
-            {
-                try
+            {   for(int i = 0; i < clientDict.Count; i++)
                 {
-                    byte[] tempBuffer = new byte[1024 * 1024 * 2];
-                    var effective = myClientSocket.Receive(tempBuffer);
-                    byte[] resultBuffer = new byte[effective];
-
-                    Array.Copy(tempBuffer, 0, resultBuffer, 0, effective);
-                    if (effective == 0)
+                    myClientSocket = clientDict[(PlayerID)i];
+                    Console.WriteLine("foreach");
+                    try
                     {
+                        byte[] tempBuffer = new byte[1024 * 1024 * 2];
+                        var effective = myClientSocket.Receive(tempBuffer);
+                        byte[] resultBuffer = new byte[effective];
+
+                        Array.Copy(tempBuffer, 0, resultBuffer, 0, effective);
+                        if (effective == 0)
+                        {
+                            break;
+                        }
+                        Console.WriteLine("rescive");
+                        MsgPack msg = ProtoSerialize.Deserialize<MsgPack>(resultBuffer);
+                        receiveMsgList.Enqueue(msg);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                        myClientSocket.Shutdown(SocketShutdown.Both);
+                        myClientSocket.Close();
                         break;
                     }
-                    MsgPack msg = ProtoSerialize.Deserialize<MsgPack>(resultBuffer);
-                    receiveMsgList.Enqueue(msg);
+
                 }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.Message);
-                    myClientSocket.Shutdown(SocketShutdown.Both);
-                    myClientSocket.Close();
-                    break;
-                }
+                
             }
         }
 
@@ -168,17 +182,34 @@ namespace Sever
         /// <param name="clientSocket"></param>
         private static void SendMessage(object clientSocket)
         {
-            Socket myClientSocket = (Socket)clientSocket;
+            Socket myClientSocket = null;
+            //Socket myClientSocket = (Socket)clientSocket;
             while (true)
             {
                 try
                 {
-                    if (sendMsgList.Count != 0)
+                    if (sendMsgList.Count > 0)
                     {
                         var serMsgPack = sendMsgList.Dequeue();
                         var msg = ProtoSerialize.Serialize<MsgPack>(serMsgPack);
-                        myClientSocket.Send(msg);
-                        Console.WriteLine("send");
+
+                        foreach (KeyValuePair<PlayerID, Socket> item in clientDict)
+                        {
+                            Console.WriteLine(item.Key);
+                            Console.WriteLine(serMsgPack.MsgTo);
+                            Console.WriteLine(serMsgPack.MsgType);
+                            if (item.Key == serMsgPack.MsgTo)
+                            {
+                                myClientSocket = item.Value;
+                                break;
+                            }
+                                
+                        }
+                        if(myClientSocket != null)
+                            myClientSocket.Send(msg);
+                        else
+                            Console.WriteLine("ERROR: myClientSocket is null!");
+                        //Console.WriteLine("send");
                     }
                 }
                 catch (Exception ex)

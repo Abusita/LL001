@@ -19,8 +19,6 @@ public class Card : MonoBehaviour {
     public bool isBorn = false;
     [HideInInspector]
     public int bornPos = 0;
-    [HideInInspector]
-    public int test;
 
 	// Use this for initialization
 	void Start () {

@@ -91,7 +91,7 @@ public class ProtoControl : MonoBehaviour {
     {
         var m = ProtoSerialize.Serialize<MsgPack>(msg);
         clientSocket.Send(m);
-
+        Debug.Log("send");
     }
 
     void ResciveMsg(object clientSocket)
