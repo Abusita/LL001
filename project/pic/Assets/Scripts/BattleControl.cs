@@ -6,8 +6,6 @@ using CsProtobuf;
 public class BattleControl : MonoBehaviour {
 
     public GameObject[] Groups = null;
-    private List<playerItems> campCS;
-
 
     //临时数据
     int maxGroups = 2;
@@ -318,13 +316,6 @@ public class BattleControl : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        campCS = new List<playerItems>();
-        foreach (GameObject g in Groups)
-        {
-            playerItems group = new playerItems();
-            campCS.Add(group);
-        }
-
         DelegateManager.UpdateBattleSceneEvent += InitScene;
     }
 	

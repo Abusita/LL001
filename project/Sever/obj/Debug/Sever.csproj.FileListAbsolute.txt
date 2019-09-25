@@ -7,3 +7,12 @@ E:\Visual Studio Projects\Sever\obj\Debug\Sever.csproj.CoreCompileInputs.cache
 E:\Visual Studio Projects\Sever\obj\Debug\Sever.csproj.CopyComplete
 E:\Visual Studio Projects\Sever\obj\Debug\Sever.exe
 E:\Visual Studio Projects\Sever\obj\Debug\Sever.pdb
+E:\Porject_LL001\LL001\project\Sever\bin\Debug\Sever.exe.config
+E:\Porject_LL001\LL001\project\Sever\bin\Debug\Sever.exe
+E:\Porject_LL001\LL001\project\Sever\bin\Debug\Sever.pdb
+E:\Porject_LL001\LL001\project\Sever\bin\Debug\Google.Protobuf.dll
+E:\Porject_LL001\LL001\project\Sever\obj\Debug\Sever.csprojAssemblyReference.cache
+E:\Porject_LL001\LL001\project\Sever\obj\Debug\Sever.csproj.CoreCompileInputs.cache
+E:\Porject_LL001\LL001\project\Sever\obj\Debug\Sever.csproj.CopyComplete
+E:\Porject_LL001\LL001\project\Sever\obj\Debug\Sever.exe
+E:\Porject_LL001\LL001\project\Sever\obj\Debug\Sever.pdb
