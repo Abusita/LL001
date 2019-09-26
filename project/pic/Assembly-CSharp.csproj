@@ -64,7 +64,6 @@
      <Compile Include="Assets\Scripts\CommonData.cs" />
      <Compile Include="Assets\Scripts\cs_protobuf\CsEnum.cs" />
      <Compile Include="Assets\Scripts\cs_protobuf\CsMsg.cs" />
-     <Compile Include="Assets\Scripts\cs_protobuf\CsPerson.cs" />
      <Compile Include="Assets\Scripts\DelegateManager.cs" />
      <Compile Include="Assets\Scripts\enemyItems.cs" />
      <Compile Include="Assets\Scripts\MsgHandle.cs" />

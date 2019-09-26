@@ -8,7 +8,7 @@ public class DelegateManager : MonoBehaviour {
     public delegate void UpdateEventDelegate(MsgPack msg); //更新事件委托
 
     public static UpdateEventDelegate UpdateBattleSceneEvent;   //更新战斗场景
-
+    
 
     /// <summary>
     /// 更新战斗场景

@@ -64,7 +64,7 @@ public class CardItem : MonoBehaviour {
                     sr.sortingOrder = 0;
 
                     GameObject.FindGameObjectWithTag("BattleControl").GetComponent<BattleControl>().ResetItemTag();
-                    GameObject.FindGameObjectWithTag("BattleControl").GetComponent<BattleControl>().RunByStep();
+                    GameObject.FindGameObjectWithTag("BattleControl").GetComponent<BattleControl>().RunByStep2();
                 }
             }
             transform.Translate(moveDir * moveSpeed * Time.fixedDeltaTime);
@@ -80,12 +80,8 @@ public class CardItem : MonoBehaviour {
         if (col.gameObject.tag == "atkItem")
         {
             if (gameObject.tag == "defItem")
-            {        
-                gameObject.GetComponent<Card>().maxHp = Mathf.Max(0, gameObject.GetComponent<Card>().maxHp - 5);
-                if (gameObject.GetComponent<Card>().maxHp == 0)
-                {
-                    GameObject.Destroy(this.gameObject);
-                }
+            {
+                gameObject.GetComponent<Card>().OnCollisionHandle(); ;
             }
 
         }

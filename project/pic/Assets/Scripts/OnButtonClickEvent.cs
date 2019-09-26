@@ -12,7 +12,6 @@ public class OnButtonClickEvent : MonoBehaviour {
     /// </summary>
     public void OnButtonInit()
     {
-        //GameObject.Find("BattleControl").GetComponent<BattleControl>().Init();
 
         MsgPack msg = new MsgPack();
         msg.MsgType = MsgType.CsInitbattlesceneReq;
@@ -34,7 +33,12 @@ public class OnButtonClickEvent : MonoBehaviour {
     /// </summary>
     public void OnButtonBattle()
     {
-        GameObject.Find("BattleControl").GetComponent<BattleControl>().Battle();
+        MsgPack msg = new MsgPack();
+        msg.MsgType = MsgType.CsBattlestartReq;
+        msg.MsgFrom = MsgHandle.playerID;
+        msg.MsgTo = PlayerID.CsServe;
+        MsgHandle.SendMsgList.Enqueue(msg);
+
     }
 
 	// Use this for initialization

@@ -7,7 +7,6 @@ using System.Net.Sockets;
 using System.Threading;
 
 using Google.Protobuf;
-using Jaihk662;
 using CsProtobuf;
 using System.Collections;
 
@@ -146,27 +145,7 @@ public class ProtoControl : MonoBehaviour {
         }
     }
 
-    void testPro()
-    {
-        TestForProto toServer = new TestForProto();
-        toServer.Name = "Jaihk662";
-        toServer.Age = 22;
-        for (int i = 5; i <= 7; i++)
-            toServer.Pos.Add(i);
 
-        //将对象转换成字节数组
-        byte[] databytes = toServer.ToByteArray();
-
-        //将字节数据的数据还原到对象中
-        IMessage IMperson = new TestForProto();
-        TestForProto toClient = new TestForProto();
-        toClient = (TestForProto)IMperson.Descriptor.Parser.ParseFrom(databytes);
-
-        Debug.Log(toClient.Name);
-        Debug.Log(toClient.Age);
-        for (int i = 0; i < toClient.Pos.Count; i++)
-            Debug.Log(toClient.Pos[i]);
-    }
 
     // Use this for initialization
     void Start()

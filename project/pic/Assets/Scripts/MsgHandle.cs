@@ -32,6 +32,9 @@ public class MsgHandle : MonoBehaviour {
                 case MsgType.CsInitbattlesceneRes:
                     DelegateManager.OnUpdateBattleSceneEvent(msg);
                     break;
+                case MsgType.CsBattlestartRes:
+                    DelegateManager.OnUpdateBattleSceneEvent(msg);
+                    break;
                 default:
                     break;
             }

@@ -10,8 +10,8 @@ public class playerItems : MonoBehaviour {
     public GameObject cardItem;             //卡牌Prefab
     public GameObject[] items;              //站位
 
-    public CommonData.PlayerID playerID;    //玩家标识符
-    public CommonData.Camps localCamp;
+    public PlayerID playerID;    //玩家标识符
+    public Camps localCamp;
 
 
     private void Init(CampInfo campInfo)
@@ -26,11 +26,12 @@ public class playerItems : MonoBehaviour {
                 card.transform.parent = items[bornPos].transform;
                 card.transform.localPosition = Vector3.zero;
 
-                /*items[bornPos].GetComponentInChildren<Card>().atk = it.Atk;
+                items[bornPos].GetComponentInChildren<Card>().atk = it.Atk;
                 items[bornPos].GetComponentInChildren<Card>().maxHp = it.MaxHp;
                 items[bornPos].GetComponentInChildren<Card>().def = it.Def;
                 items[bornPos].GetComponentInChildren<Card>().speed = it.Speed;
-                items[bornPos].GetComponentInChildren<Card>().bornPos = it.BornPos;*/
+                items[bornPos].GetComponentInChildren<Card>().bornPos = it.BornPos;
+                items[bornPos].GetComponentInChildren<Card>().camp = localCamp;
             }
         }
     }

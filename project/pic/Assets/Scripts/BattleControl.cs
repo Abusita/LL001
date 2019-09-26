@@ -18,6 +18,8 @@ public class BattleControl : MonoBehaviour {
     BattleData battleData;
     List<MsgPackage> msgPackage; //消息包
 
+    BattleGroupPack groupPack = new BattleGroupPack();
+
 
     /// <summary>
     /// 速度列表Item
@@ -104,6 +106,21 @@ public class BattleControl : MonoBehaviour {
     }
 
 
+    public void MsgHandle(MsgPack msg)
+    {
+        switch (msg.MsgType)
+        {
+            case MsgType.CsInitbattlesceneRes:
+                InitScene(msg);
+                break;
+            case MsgType.CsBattlestartRes:
+                BattleSart(msg);
+                break;
+            default:
+                break;
+        }
+    }
+
     public void InitScene(MsgPack msg)
     {
         if(msg.InitItemPack != null)
@@ -118,6 +135,11 @@ public class BattleControl : MonoBehaviour {
         }
     }
 
+    public void BattleSart(MsgPack msg)
+    {
+        this.groupPack = msg.GroupPack;
+        RunByStep2();
+    }
 
     /// <summary>
     /// 初始化战斗
@@ -261,14 +283,73 @@ public class BattleControl : MonoBehaviour {
     /// </summary>
     public void ResetItemTag()
     {
-        for(int i = 0; i < Groups.Length; i++)
+        foreach (GameObject item in Groups[(int)Camps.CsCampPlayer].GetComponent<playerItems>().items)
+            foreach (Transform child in item.transform)
+                child.tag = "Untagged";
+        foreach (GameObject item in Groups[(int)Camps.CsCampEnemy].GetComponent<enemyItems>().items)
+            foreach (Transform child in item.transform)
+                child.tag = "Untagged";
+    }
+
+    /// <summary>
+    /// 战斗演示
+    /// </summary>
+    public void RunByStep2()
+    {
+        if (setpIndex == groupPack.Rounds[roundIndex].Steps.Count)
         {
-            foreach (GameObject item in Groups[i].GetComponent<playerItems>().items)
-                foreach (Transform child in item.transform)
-                    child.tag = "Untagged";
+            roundIndex++;
+            setpIndex = 0;
+        }
+        if (roundIndex == groupPack.Rounds.Count)
+        {
+            Debug.Log("本场战斗结束");
+            roundIndex = 0;
+            setpIndex = 0;
+            return;
+        }
+        ActiveItem atkItem = groupPack.Rounds[roundIndex].Steps[setpIndex].AtkItem;
+        ActiveItem defItem = groupPack.Rounds[roundIndex].Steps[setpIndex].DefItem;
+
+        if(atkItem.Camp == Camps.CsCampPlayer)
+        {
+            Vector3 startPos = Groups[(int)atkItem.Camp].GetComponent<playerItems>().items[atkItem.Card.BornPos].transform.position;
+            Vector3 endPos = Groups[(int)defItem.Camp].GetComponent<enemyItems>().items[defItem.Card.BornPos].transform.position;
+
+            Debug.Log("atkItem.Card.BornPos " + atkItem.Card.BornPos);
+            Debug.Log("defItem.Card.BornPos " + defItem.Card.BornPos);
+
+            Groups[(int)atkItem.Camp].GetComponent<playerItems>().items[atkItem.Card.BornPos].GetComponentsInChildren<Transform>()[1].tag = "atkItem";
+            Groups[(int)defItem.Camp].GetComponent<enemyItems>().items[defItem.Card.BornPos].GetComponentsInChildren<Transform>()[1].tag = "defItem";
+
+            Groups[(int)atkItem.Camp].GetComponent<playerItems>().items[atkItem.Card.BornPos].GetComponentInChildren<CardItem>().Move(endPos - startPos);
+
+            StepResult stepRes = groupPack.Rounds[roundIndex].Steps[setpIndex].StepResList[0];
+            Groups[(int)atkItem.Camp].GetComponent<playerItems>().items[atkItem.Card.BornPos].GetComponentInChildren<Card>().StepAttrRes(stepRes);
+            Groups[(int)defItem.Camp].GetComponent<enemyItems>().items[defItem.Card.BornPos].GetComponentInChildren<Card>().StepAttrRes(stepRes);
+        }
+        if (atkItem.Camp == Camps.CsCampEnemy)
+        {
+            Vector3 startPos = Groups[(int)atkItem.Camp].GetComponent<enemyItems>().items[atkItem.Card.BornPos].transform.position;
+            Vector3 endPos = Groups[(int)defItem.Camp].GetComponent<playerItems>().items[defItem.Card.BornPos].transform.position;
+
+            Debug.Log("atkItem.Card.BornPos " + atkItem.Card.BornPos);
+            Debug.Log("defItem.Card.BornPos " + defItem.Card.BornPos);
+
+            Groups[(int)atkItem.Camp].GetComponent<enemyItems>().items[atkItem.Card.BornPos].GetComponentsInChildren<Transform>()[1].tag = "atkItem";
+            Groups[(int)defItem.Camp].GetComponent<playerItems>().items[defItem.Card.BornPos].GetComponentsInChildren<Transform>()[1].tag = "defItem";
+
+            Groups[(int)atkItem.Camp].GetComponent<enemyItems>().items[atkItem.Card.BornPos].GetComponentInChildren<CardItem>().Move(endPos - startPos);
+
+            StepResult stepRes = groupPack.Rounds[roundIndex].Steps[setpIndex].StepResList[0];
+            Groups[(int)atkItem.Camp].GetComponent<enemyItems>().items[atkItem.Card.BornPos].GetComponentInChildren<Card>().StepAttrRes(stepRes);
+            Groups[(int)defItem.Camp].GetComponent<playerItems>().items[defItem.Card.BornPos].GetComponentInChildren<Card>().StepAttrRes(stepRes);
         }
 
+
+        setpIndex++;
     }
+
 
     /// <summary>
     /// 战斗演示
@@ -316,7 +397,7 @@ public class BattleControl : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        DelegateManager.UpdateBattleSceneEvent += InitScene;
+        DelegateManager.UpdateBattleSceneEvent += MsgHandle;
     }
 	
 	// Update is called once per frame

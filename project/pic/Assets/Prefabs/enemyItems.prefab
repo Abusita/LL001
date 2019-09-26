@@ -315,14 +315,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardItem: {fileID: 1501783261194280, guid: dfdd70c17222f444bbc055b465c4e23e, type: 2}
   items:
-  - {fileID: 1600632303359320}
-  - {fileID: 1532712584843448}
-  - {fileID: 1540921890677666}
-  - {fileID: 1605053330355754}
   - {fileID: 1509164805196788}
   - {fileID: 1402706784487370}
   - {fileID: 1954780707440982}
   - {fileID: 1641230067201148}
+  - {fileID: 1600632303359320}
+  - {fileID: 1532712584843448}
+  - {fileID: 1540921890677666}
+  - {fileID: 1605053330355754}
   playerID: 0
   localCamp: 1
 --- !u!212 &212208218912785722

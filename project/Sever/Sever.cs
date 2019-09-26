@@ -10,9 +10,20 @@ namespace Sever
 {
     class Sever
     {
+        /*public class SpeedListItem
+        {
+            public Camps camp = Camps.CsCampPlayer;
+            public CardMsg card = new CardMsg();
+
+            public int cardID = 0;
+            public float speed = 0;
+
+        };*/
+
+
         private static int myProt = 8885;
 
-        private static int maxGroup = 2;
+        private static int maxCamps = 2;
         private static int maxItems = 16;
         private static int bornStandard = 50;
 
@@ -67,14 +78,13 @@ namespace Sever
                     switch (sm.MsgType)
                     {
                         case MsgType.CsInitbattlesceneReq:
-                            MsgPack m = InitData();                      
-                            m.MsgTo = sm.MsgFrom;
-                            Console.WriteLine("MsgTo: " + m.MsgTo);
+                            MsgPack m = GetInitData(sm.MsgFrom);                      
+                            
                             sendMsgList.Enqueue(m);
                             break;
                         case MsgType.CsBattlestartReq:
-                            break;
-                        case MsgType.CsBattlestartRes:
+                            Console.WriteLine("MsgType.CsBattlestartReq: " + sm.MsgFrom);
+                            InitBattlePack(sm.MsgFrom);
                             break;
                         default:
                             break;
@@ -83,20 +93,17 @@ namespace Sever
             }
         }
 
-        /// <summary>
-        /// 初始化场景
-        /// </summary>
-        /// <returns></returns>
+        /*
         private static MsgPack InitData()
         {
             MsgPack msgPack = new MsgPack();
             msgPack.MsgType = MsgType.CsInitbattlesceneRes;
             msgPack.MsgFrom = PlayerID.CsServe;
-            msgPack.MsgTo = PlayerID.CsPlayerOne;
+            msgPack.MsgTo = PlayerID.CsUndefined;
             InitItemPack initItemPacks = new InitItemPack();
 
             Random rand = new Random();
-            for (int i = 0; i < maxGroup; i++)
+            for (int i = 0; i < maxCamps; i++)
             {
                 CampInfo campInfo = new CampInfo();
                 int idIndex = 0;
@@ -134,6 +141,197 @@ namespace Sever
             msgPack.InitItemPack = initItemPacks;
             return msgPack;
         }
+        */
+
+        /// <summary>
+        /// 初始化场景
+        /// </summary>
+        /// <returns></returns>
+        private static void InitData(PlayerID playerID)
+        {
+            Data.BattleGroup battleGroup = new Data.BattleGroup();
+            Random rand = new Random();
+            for (int i = 0; i < maxCamps; i++)
+            {
+                CampInfo campInfo = new CampInfo();
+                int idIndex = 0;
+                for (int j = 0; j < maxItems / 2; j++)
+                {
+                    CardMsg card = new CardMsg();
+                    float rd;
+
+                    if ((idIndex == 0) && (j == maxItems / 2 - 1))
+                        rd = bornStandard + 1;
+                    else
+                    {
+                        rd = rand.Next(0, 100);
+                    }
+                    if (rd > bornStandard)
+                    {
+                        card.IsBorn = true;
+                        card.MaxHp = rand.Next(60, 100);
+                        card.Atk = rand.Next(50, 80);
+                        card.Def = rand.Next(30, 60);
+                        card.Speed = rd;
+                        card.BornPos = j;
+                        card.Id = idIndex;
+                        idIndex++;
+                        campInfo.CardItems.Add(card);
+
+                    }
+                }
+                campInfo.Camp = (Camps)i;
+                campInfo.ItemsCount = campInfo.CardItems.Count;
+
+                battleGroup.campInfo.Add(campInfo);
+
+            }
+            if(Data.battleGroupDict.ContainsKey(playerID))
+                Data.battleGroupDict.Remove(playerID);
+            Data.battleGroupDict.Add(playerID, battleGroup);
+        }
+
+        private static MsgPack GetInitData(PlayerID playerID)
+        {
+            InitData(playerID);
+           
+            MsgPack msgPack = new MsgPack();
+            msgPack.MsgType = MsgType.CsInitbattlesceneRes;
+            msgPack.MsgFrom = PlayerID.CsServe;
+            msgPack.MsgTo = playerID;
+            InitItemPack initItemPacks = new InitItemPack();
+
+            for(int i = 0; i < Data.battleGroupDict.Count; i++)
+            {
+                if((PlayerID)i == playerID)
+                {
+                    List<CampInfo> campInfo = Data.battleGroupDict[(PlayerID)i].campInfo;
+                    for (int j = 0; j < campInfo.Count; j++)
+                    {
+                        initItemPacks.CampInfos.Add(campInfo[j]);
+                    }
+                }
+            }
+
+            msgPack.InitItemPack = initItemPacks;
+            return msgPack;
+        }
+
+
+        /// <summary>
+        /// 初始化单组对战
+        /// </summary>
+        /// <param name="playerID"></param>
+        private static void InitBattlePack(PlayerID playerID)
+        { 
+            for (int i = 0; i < Data.battleGroupDict.Count; i++)
+            {
+                if(Data.battleGroupDict.ContainsKey((PlayerID)i))
+                {        
+                    Data.BattleGroup curBattleGroup = Data.battleGroupDict[(PlayerID)i];
+
+                    //创建SpeedItemList，添加在场所有单位
+                    List<Data.SpeedItemList> speedItemLists = new List<Data.SpeedItemList>();
+                    foreach(CampInfo c in curBattleGroup.campInfo)
+                    {
+                        foreach(CardMsg card in c.CardItems)
+                        {
+                            Data.SpeedItemList item = new Data.SpeedItemList();
+                            item.camp = c.Camp;
+                            item.card = card;
+                            speedItemLists.Add(item);
+                        }                          
+                    }
+
+                    //SpeedItemList中元素依速度降序排序
+                    speedItemLists.Sort((x, y) => { return y.card.Speed.CompareTo(x.card.Speed); });
+                    foreach (Data.SpeedItemList s in speedItemLists)
+                    Console.WriteLine("camp: " + s.camp + "  pos: " + s.card.BornPos + "  speed: " + s.card.Speed);
+
+
+                    //创建消息包
+                    bool isBattleEnd = false;
+                    BattleGroupPack battleGroupPack = new BattleGroupPack();
+                   
+                    while (!isBattleEnd)
+                    {
+                        Round round = new Round();
+                        for (int j = 0; j < speedItemLists.Count; j++)
+                        {
+                            Console.WriteLine("============================Step start=================== ");
+                            Console.WriteLine("camp: " + speedItemLists[j].camp + " selfPos: " + speedItemLists[j].card.BornPos);
+
+                            int targetIndex = Radar.GetTargetIndex(speedItemLists, Radar.RadarType.front_first, speedItemLists[j].camp, speedItemLists[j].card.BornPos);
+
+                            float atk = speedItemLists[j].card.Atk;
+                            float def = speedItemLists[targetIndex].card.Def;
+
+                            float damage = Math.Max(10, atk - def);
+
+                            speedItemLists[targetIndex].card.MaxHp = Math.Max(0, speedItemLists[targetIndex].card.MaxHp - damage);
+
+                            #region == Pack Round Msg ==
+                            AttributeResult attributeRes = new AttributeResult();
+                            attributeRes.Camp = speedItemLists[targetIndex].camp;
+                            attributeRes.ResAttr = CardAttribute.CsCardMaxhp;
+                            attributeRes.Value = -5;
+
+                            StepResult stepRes = new StepResult();
+                            stepRes.AttrResList.Add(attributeRes);
+                            stepRes.AtkType = AtkType.CsAtktypeAtk;
+
+                            Step step = new Step();
+                            step.AtkItem = new ActiveItem();
+                            step.DefItem = new ActiveItem();
+                            step.AtkItem.Camp = speedItemLists[j].camp;
+                            step.AtkItem.Card = speedItemLists[j].card;
+                            step.DefItem.Camp = speedItemLists[targetIndex].camp;
+                            step.DefItem.Card = speedItemLists[targetIndex].card;
+                            step.StepResList.Add(stepRes);
+
+                            round.Steps.Add(step);
+
+                            #endregion
+
+                            if (speedItemLists[targetIndex].card.MaxHp == 0)
+                            {
+                                speedItemLists.RemoveAt(targetIndex);
+                                Console.WriteLine("RemoveAt:  " + targetIndex);
+                            }
+
+                            int playerCount = 0;
+                            int enemyCount = 0;
+                            foreach (var it in speedItemLists)
+                            {
+                                if (it.camp == Camps.CsCampPlayer)
+                                    playerCount++;
+                                if (it.camp == Camps.CsCampEnemy)
+                                    enemyCount++;
+                            }
+                            Console.WriteLine("playerCount:  " + playerCount+ "  enemyCount: " + enemyCount);
+                            if ((playerCount == 0)||(enemyCount == 0))
+                            {
+                                
+                                isBattleEnd = true;
+                                break;
+                            }
+                            Console.WriteLine("===========Step end========== ");
+                            Console.WriteLine();
+                        }
+                        battleGroupPack.Rounds.Add(round);
+                    }
+                    MsgPack msg = new MsgPack();
+                    msg.MsgType = MsgType.CsBattlestartRes;
+                    msg.MsgFrom = PlayerID.CsServe;
+                    msg.MsgTo = playerID;
+                    msg.GroupPack = battleGroupPack;
+
+                    sendMsgList.Enqueue(msg);
+                }
+
+            }
+        }
+
 
         /// <summary>
         /// 接收消息
@@ -147,7 +345,6 @@ namespace Sever
             {   for(int i = 0; i < clientDict.Count; i++)
                 {
                     myClientSocket = clientDict[(PlayerID)i];
-                    Console.WriteLine("foreach");
                     try
                     {
                         byte[] tempBuffer = new byte[1024 * 1024 * 2];
@@ -225,6 +422,7 @@ namespace Sever
 
         static void Main(string[] args)
         {
+            Data.Init();
             IPAddress ip = IPAddress.Parse("127.0.0.1");
             serverSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             serverSocket.Bind(new IPEndPoint(ip, myProt));
