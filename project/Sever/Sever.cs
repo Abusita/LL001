@@ -169,7 +169,7 @@ namespace Sever
                     if (rd > bornStandard)
                     {
                         card.IsBorn = true;
-                        card.MaxHp = rand.Next(60, 100);
+                        card.MaxHp = 30;
                         card.Atk = rand.Next(50, 80);
                         card.Def = rand.Next(30, 60);
                         card.Speed = rd;
@@ -246,7 +246,7 @@ namespace Sever
                     //SpeedItemList中元素依速度降序排序
                     speedItemLists.Sort((x, y) => { return y.card.Speed.CompareTo(x.card.Speed); });
                     foreach (Data.SpeedItemList s in speedItemLists)
-                    Console.WriteLine("camp: " + s.camp + "  pos: " + s.card.BornPos + "  speed: " + s.card.Speed);
+                    Console.WriteLine("camp: " + s.camp + "  pos: " + s.card.BornPos + "  speed: " + s.card.Speed + "  maxHp: " + s.card.MaxHp);
 
 
                     //创建消息包
@@ -270,12 +270,14 @@ namespace Sever
 
                             speedItemLists[targetIndex].card.MaxHp = Math.Max(0, speedItemLists[targetIndex].card.MaxHp - damage);
 
+                            //speedItemLists[targetIndex].card.MaxHp = Math.Max(0, speedItemLists[targetIndex].card.MaxHp - 5);
+
                             #region == Pack Round Msg ==
                             AttributeResult attributeRes = new AttributeResult();
                             attributeRes.Camp = speedItemLists[targetIndex].camp;
                             attributeRes.ResAttr = CardAttribute.CsCardMaxhp;
-                            attributeRes.Value = -5;
-
+                            attributeRes.Value = damage;
+                            Console.WriteLine("Damage is:  " + damage);
                             StepResult stepRes = new StepResult();
                             stepRes.AttrResList.Add(attributeRes);
                             stepRes.AtkType = AtkType.CsAtktypeAtk;
@@ -290,13 +292,14 @@ namespace Sever
                             step.StepResList.Add(stepRes);
 
                             round.Steps.Add(step);
-
+                            Console.WriteLine("Camp:  " + speedItemLists[targetIndex].camp + " maxHp is: " + speedItemLists[targetIndex].card.MaxHp);
                             #endregion
 
                             if (speedItemLists[targetIndex].card.MaxHp == 0)
                             {
+                                Console.WriteLine("Remove:  " + speedItemLists[targetIndex].camp + " " + speedItemLists[targetIndex].card.BornPos);
                                 speedItemLists.RemoveAt(targetIndex);
-                                Console.WriteLine("RemoveAt:  " + targetIndex);
+                                
                             }
 
                             int playerCount = 0;

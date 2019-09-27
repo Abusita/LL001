@@ -6,9 +6,9 @@ using CsProtobuf;
 
 public class MsgHandle : MonoBehaviour {
 
-    public static Queue<MsgPack> ReceiveMsgList;
-    public static Queue<MsgPack> SendMsgList;
-    public static PlayerID playerID;
+    public static Queue<MsgPack> ReceiveMsgList;    //消息接收队列
+    public static Queue<MsgPack> SendMsgList;       //消息发送队列
+    public static PlayerID playerID;                //客户端身份
 
     // Use this for initialization
     void Start () {
@@ -17,6 +17,15 @@ public class MsgHandle : MonoBehaviour {
         playerID = PlayerID.CsUndefined;
     }
 	
+    void showMsg(MsgPack msg)
+    {
+        BattleGroupPack battleGroupPack = msg.GroupPack;
+        foreach(Round r in battleGroupPack.Rounds)
+        {
+
+        }
+    }
+
 	// Update is called once per frame
 	void Update () {
 		
@@ -43,7 +52,6 @@ public class MsgHandle : MonoBehaviour {
         {
             MsgPack msg = SendMsgList.Dequeue();
             ProtoControl.SendMsg(msg);
-            
         }
     }
 }

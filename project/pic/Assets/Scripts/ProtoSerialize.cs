@@ -5,6 +5,9 @@ using System.IO;
 using System;
 using Google.Protobuf;
 
+/// <summary>
+/// 消息序列化
+/// </summary>
 public class ProtoSerialize : MonoBehaviour
 {
     public static byte[] Serialize<T>(T obj) where T : IMessage

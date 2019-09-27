@@ -24,6 +24,10 @@ public class Card : MonoBehaviour {
     public Camps camp = Camps.CsCampPlayer;
     private List<AttributeResult> attributeResults;
 
+    /// <summary>
+    /// 本步结果筛选
+    /// </summary>
+    /// <param name="stepRes">本步结果数据</param>
     public void StepAttrRes(StepResult stepRes)
     {
         foreach ( var it in stepRes.AttrResList)
@@ -35,6 +39,9 @@ public class Card : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// 碰撞处理
+    /// </summary>
     public void OnCollisionHandle()
     {
         foreach (var item in attributeResults)
@@ -42,13 +49,10 @@ public class Card : MonoBehaviour {
             switch (item.ResAttr)
             {
                 case CardAttribute.CsCardMaxhp:
-                    maxHp -= 5;
-                    maxHp = Mathf.Max(0, maxHp);
-                    maxHp = Mathf.Min(100, maxHp);
-                    if (maxHp == 0)
-                    {
-                        Destroy(this.gameObject);
-                    }
+                    maxHp -= item.Value;
+                    maxHp = Mathf.Clamp(maxHp, 0, 100);
+                    Debug.Log("damage is ： " + item.Value);
+                    Debug.Log(camp + " 的 " + bornPos + " 剩余血量: " + maxHp);
                     break;
                 case CardAttribute.CsCardAtk:
                     break;
@@ -70,7 +74,11 @@ public class Card : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+        if (maxHp == 0)
+        {
+            Debug.Log("Destory Card " + camp + " " + bornPos);
+            Destroy(this.gameObject);
+        }
 
-            
-	}
+    }
 }

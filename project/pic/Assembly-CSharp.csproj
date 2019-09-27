@@ -58,16 +58,13 @@
      <Compile Include="Assets\Assets_old\Scripts\yidong.cs" />
      <Compile Include="Assets\Assets_old\Scripts\zishenzhanji.cs" />
      <Compile Include="Assets\Scripts\BattleControl.cs" />
-     <Compile Include="Assets\Scripts\BattleData.cs" />
      <Compile Include="Assets\Scripts\Card.cs" />
      <Compile Include="Assets\Scripts\CardItem.cs" />
-     <Compile Include="Assets\Scripts\CommonData.cs" />
      <Compile Include="Assets\Scripts\cs_protobuf\CsEnum.cs" />
      <Compile Include="Assets\Scripts\cs_protobuf\CsMsg.cs" />
      <Compile Include="Assets\Scripts\DelegateManager.cs" />
      <Compile Include="Assets\Scripts\enemyItems.cs" />
      <Compile Include="Assets\Scripts\MsgHandle.cs" />
-     <Compile Include="Assets\Scripts\MsgPackage.cs" />
      <Compile Include="Assets\Scripts\OnButtonClickEvent.cs" />
      <Compile Include="Assets\Scripts\playerItems.cs" />
      <Compile Include="Assets\Scripts\ProtoControl.cs" />

@@ -7,7 +7,6 @@ public class CardItem : MonoBehaviour {
     [HideInInspector]
     public float moveSpeed = 10.0f;
 
-    Rigidbody2D rd;
     SpriteRenderer sr;
 
     //移动方向向量
@@ -26,7 +25,6 @@ public class CardItem : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        this.rd = this.GetComponent<Rigidbody2D>();
         this.sr = this.GetComponent<SpriteRenderer>();
 
         this.moveDir = new Vector3(0.0f, 0.0f, 0.0f);
@@ -64,7 +62,7 @@ public class CardItem : MonoBehaviour {
                     sr.sortingOrder = 0;
 
                     GameObject.FindGameObjectWithTag("BattleControl").GetComponent<BattleControl>().ResetItemTag();
-                    GameObject.FindGameObjectWithTag("BattleControl").GetComponent<BattleControl>().RunByStep2();
+                    GameObject.FindGameObjectWithTag("BattleControl").GetComponent<BattleControl>().RunByStep();
                 }
             }
             transform.Translate(moveDir * moveSpeed * Time.fixedDeltaTime);
@@ -75,7 +73,6 @@ public class CardItem : MonoBehaviour {
 
     void OnTriggerEnter2D(Collider2D col)
     {
-        
         //作为非攻击者
         if (col.gameObject.tag == "atkItem")
         {

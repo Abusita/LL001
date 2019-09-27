@@ -12,16 +12,11 @@ using System.Collections;
 
 public class ProtoControl : MonoBehaviour {
 
-    private  GameObject battleControl;
-    private  BattleControl battleControlCS;
-
-    private  byte[] result = new byte[1024];
-
-    private  IEnumerator resciveCor;
-    private bool isRecMsg;
-    private MsgPack msg;
     public static Socket clientSocket;
 
+    /// <summary>
+    /// 连接到服务器
+    /// </summary>
     void ConnectToSever()
     {
         //设定服务器IP地址 
@@ -38,61 +33,27 @@ public class ProtoControl : MonoBehaviour {
             return;
         }
 
-        //开始监听
+        //开始监听服务器消息
         Thread resciveTr = new Thread(ResciveMsg);
         resciveTr.Start(clientSocket);
-        //Thread sendTr = new Thread(SendMessage);
-        //sendTr.Start(clientSocket);
-
-        //resciveCor = WaitAndPrint(0.2f, clientSocket);
-        //StartCoroutine(resciveCor);
-
     }
 
 
-    private IEnumerator WaitAndPrint(float waitTime, object clientSocket)
-    {
-        Debug.Log("IEnum");
-        while (true)
-        {
-            Socket myClientSocket = (Socket)clientSocket;
-            byte[] tempBuffer = new byte[1024 * 1024 * 2];
-            var effective = myClientSocket.Receive(tempBuffer);
-            byte[] resultBuffer = new byte[effective];
 
-            Array.Copy(tempBuffer, 0, resultBuffer, 0, effective);
-            if (effective == 0)
-            {
-                break;
-            }
-            msg = ProtoSerialize.Deserialize<MsgPack>(resultBuffer);
-            MsgHandle.ReceiveMsgList.Enqueue(msg);
-
-            //isRecMsg = true;
-            /*foreach (CampInfo item in msg.InitItemPack.CampInfos)
-                {
-                    Debug.Log(item.Camp);
-                    Debug.Log(item.ItemsCount);
-                    foreach (CardMsg c in item.CardItems)
-                    {
-                        Debug.Log("c.Id: " + c.Id + "  c.BornPos:" + c.BornPos);
-                    }
-                }*/
-
-            //battleControlCS.InitScene(message);
-            yield return new WaitForSeconds(waitTime);
-        }
-        
-    }
-
-
+    /// <summary>
+    /// 发送消息接口
+    /// </summary>
+    /// <param name="msg"></param>
     public static void SendMsg(MsgPack msg)
     {
         var m = ProtoSerialize.Serialize<MsgPack>(msg);
         clientSocket.Send(m);
-        Debug.Log("send");
     }
 
+    /// <summary>
+    /// 接收消息接口
+    /// </summary>
+    /// <param name="clientSocket">本地客户端</param>
     void ResciveMsg(object clientSocket)
     {
         while (true)
@@ -109,7 +70,7 @@ public class ProtoControl : MonoBehaviour {
                 {
                     break;
                 }
-                msg = ProtoSerialize.Deserialize<MsgPack>(resultBuffer);
+                MsgPack msg = ProtoSerialize.Deserialize<MsgPack>(resultBuffer);
                 MsgHandle.ReceiveMsgList.Enqueue(msg);
             }
             catch (Exception ex)
@@ -123,39 +84,9 @@ public class ProtoControl : MonoBehaviour {
 
     }
 
-    static void SendMessage(object clientSocket)
-    {
-        Socket myClientSocket = (Socket)clientSocket;
-        while (true)
-        {
-            try
-            {
-                Thread.Sleep(2000);    //等待1秒钟 
-                string sendMessage = "client send Message Hellp ";
-                myClientSocket.Send(Encoding.ASCII.GetBytes(sendMessage));
-                Debug.Log("向客户端发送消息：{0}" + sendMessage);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                myClientSocket.Shutdown(SocketShutdown.Both);
-                myClientSocket.Close();
-                break;
-            }
-        }
-    }
-
-
-
     // Use this for initialization
     void Start()
     {
-        battleControl = GameObject.Find("BattleControl");
-        battleControlCS = battleControl.GetComponent<BattleControl>();
-        isRecMsg = false;
-        msg = new MsgPack();
-
-
         ConnectToSever();
     }
 
@@ -163,10 +94,5 @@ public class ProtoControl : MonoBehaviour {
     void Update()
     {
         
-        /*if (isRecMsg)
-        {
-            battleControlCS.InitScene(msg);
-            isRecMsg = false;
-        }*/
 	}
 }
