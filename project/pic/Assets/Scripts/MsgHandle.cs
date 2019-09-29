@@ -17,14 +17,22 @@ public class MsgHandle : MonoBehaviour {
         playerID = PlayerID.CsUndefined;
     }
 	
-    void showMsg(MsgPack msg)
+    /// <summary>
+    /// 打印消息内容，待删
+    /// </summary>
+    /// <param name="msg"></param>
+    public static void showMsg(MsgPack msg)
     {
         BattleGroupPack battleGroupPack = msg.GroupPack;
         foreach(Round r in battleGroupPack.Rounds)
         {
-
+            foreach(Step st in r.Steps)
+            {
+                Debug.Log(" " + st.AtkItem.Camp + "  VS  " + st.DefItem.Camp + ": " +st.StepResList[0].AttrResList[0].ResAttr + " " + st.StepResList[0].AttrResList[0].Value);
+            }
         }
     }
+
 
 	// Update is called once per frame
 	void Update () {
@@ -42,7 +50,9 @@ public class MsgHandle : MonoBehaviour {
                     DelegateManager.OnUpdateBattleSceneEvent(msg);
                     break;
                 case MsgType.CsBattlestartRes:
+                    //showMsg(msg);
                     DelegateManager.OnUpdateBattleSceneEvent(msg);
+
                     break;
                 default:
                     break;

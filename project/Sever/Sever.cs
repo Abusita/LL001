@@ -426,7 +426,7 @@ namespace Sever
         static void Main(string[] args)
         {
             Data.Init();
-            IPAddress ip = IPAddress.Parse("127.0.0.1");
+            IPAddress ip = IPAddress.Parse("10.0.118.10");
             serverSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             serverSocket.Bind(new IPEndPoint(ip, myProt));
             serverSocket.Listen(10);

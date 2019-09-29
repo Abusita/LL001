@@ -47,6 +47,23 @@ public class BattleControl : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// 打印消息内容，待删
+    /// </summary>
+    /// <param name="msg"></param>
+    public static void showMsg(BattleGroupPack battleGroupPack)
+    {
+        //BattleGroupPack battleGroupPack = msg.GroupPack;
+
+        for(int i = 0; i < battleGroupPack.Rounds.Count; i++)
+        {
+            for (int j = 0; j < battleGroupPack.Rounds[i].Steps.Count; j++)
+            {
+                Step st = battleGroupPack.Rounds[i].Steps[j];
+                Debug.Log(" " + st.AtkItem.Camp + "  VS  " + st.DefItem.Camp + ": " + st.StepResList[0].AttrResList[0].ResAttr + " " + st.StepResList[0].AttrResList[0].Value);
+            }
+        }
+    }
 
     /// <summary>
     /// 开始战斗
@@ -55,6 +72,10 @@ public class BattleControl : MonoBehaviour {
     public void BattleSart(MsgPack msg)
     {
         this.groupPack = msg.GroupPack;
+        //showMsg(groupPack);
+
+
+
         RunByStep();
     }
 
@@ -88,16 +109,15 @@ public class BattleControl : MonoBehaviour {
             setpIndex = 0;
             return;
         }
+
         ActiveItem atkItem = groupPack.Rounds[roundIndex].Steps[setpIndex].AtkItem;
         ActiveItem defItem = groupPack.Rounds[roundIndex].Steps[setpIndex].DefItem;
 
-        if(atkItem.Camp == Camps.CsCampPlayer)
+
+        if (atkItem.Camp == Camps.CsCampPlayer)
         {
             Vector3 startPos = pItems[atkItem.Card.BornPos].transform.position;
             Vector3 endPos = eItems[defItem.Card.BornPos].transform.position;
-
-            Debug.Log("atkItem.Card.BornPos " + atkItem.Card.BornPos + " " + pItems[atkItem.Card.BornPos].name);
-            Debug.Log("defItem.Card.BornPos " + defItem.Card.BornPos + " " + pItems[defItem.Card.BornPos].name);
 
             pItems[atkItem.Card.BornPos].GetComponentsInChildren<Transform>()[1].tag = "atkItem";
             eItems[defItem.Card.BornPos].GetComponentsInChildren<Transform>()[1].tag = "defItem";
@@ -113,8 +133,8 @@ public class BattleControl : MonoBehaviour {
             Vector3 startPos = eItems[atkItem.Card.BornPos].transform.position;
             Vector3 endPos = pItems[defItem.Card.BornPos].transform.position;
 
-            Debug.Log("atkItem.Card.BornPos " + atkItem.Card.BornPos + " " + pItems[atkItem.Card.BornPos].name);
-            Debug.Log("defItem.Card.BornPos " + defItem.Card.BornPos + " " + pItems[defItem.Card.BornPos].name);
+            //Debug.Log("atkItem.Card.BornPos " + atkItem.Card.BornPos + " " + pItems[atkItem.Card.BornPos].name);
+            //Debug.Log("defItem.Card.BornPos " + defItem.Card.BornPos + " " + pItems[defItem.Card.BornPos].name);
 
             eItems[atkItem.Card.BornPos].GetComponentsInChildren<Transform>()[1].tag = "atkItem";
             pItems[defItem.Card.BornPos].GetComponentsInChildren<Transform>()[1].tag = "defItem";
@@ -125,6 +145,7 @@ public class BattleControl : MonoBehaviour {
             eItems[atkItem.Card.BornPos].GetComponentInChildren<Card>().StepAttrRes(stepRes);
             pItems[defItem.Card.BornPos].GetComponentInChildren<Card>().StepAttrRes(stepRes);
         }
+
         setpIndex++;
     }
 
@@ -139,6 +160,7 @@ public class BattleControl : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+
         pItems = Groups[(int)Camps.CsCampPlayer].GetComponent<playerItems>().items;
         eItems = Groups[(int)Camps.CsCampEnemy].GetComponent<enemyItems>().items;
         DelegateManager.UpdateBattleSceneEvent += MsgHandle;

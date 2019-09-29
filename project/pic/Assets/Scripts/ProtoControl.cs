@@ -20,7 +20,7 @@ public class ProtoControl : MonoBehaviour {
     void ConnectToSever()
     {
         //设定服务器IP地址 
-        IPAddress ip = IPAddress.Parse("127.0.0.1");
+        IPAddress ip = IPAddress.Parse("10.0.118.10");
         clientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
         try
         {
