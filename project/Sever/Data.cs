@@ -27,6 +27,9 @@ namespace Sever
             return -1;
         }
 
+        /// <summary>
+        /// 初始化坐标信息
+        /// </summary>
         private static void InitPos()
         {
             int[,,] pos = new int[2, 4, 2]
@@ -49,11 +52,17 @@ namespace Sever
         #endregion
 
 
+        /// <summary>
+        /// 单个对战组
+        /// </summary>
         public class BattleGroup
         {
             public List<CampInfo> campInfo = new List<CampInfo>();
         }
 
+        /// <summary>
+        /// 坐标
+        /// </summary>
         public class Pos
         {
             public int x = 0;
@@ -74,6 +83,9 @@ namespace Sever
         }
 
 
+        /// <summary>
+        /// 战斗单位列表（order by speed）
+        /// </summary>
         public class SpeedItemList
         {
             public Camps camp = Camps.CsCampPlayer;
@@ -81,6 +93,9 @@ namespace Sever
 
         }
 
+        /// <summary>
+        /// 初始化接口
+        /// </summary>
         public static void Init()
         {
             InitPos();

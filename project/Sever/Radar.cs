@@ -10,9 +10,10 @@ namespace Sever
 {
     class Radar
     {
+        //目标搜寻方式
         public enum RadarType
         {
-            front_first = 0,
+            front_first = 0,    //前排优先
         }
 
 
@@ -25,7 +26,14 @@ namespace Sever
 
 
 
-
+        /// <summary>
+        /// 获取目标索引
+        /// </summary>
+        /// <param name="speedItemList">在场单位列表（OrderBySpeed）</param>
+        /// <param name="radarType">搜索方式</param>
+        /// <param name="selfCamp">本方阵营</param>
+        /// <param name="selfPos">当前单位的位置</param>
+        /// <returns></returns>
         public static int GetTargetIndex(List<Data.SpeedItemList> speedItemList, RadarType radarType, Camps selfCamp, int selfPos)
         {
             int posAdjust_Y = -1 * Data.cardPos[selfPos].y;
@@ -36,11 +44,13 @@ namespace Sever
             {
                 for (int j = 0; j < 7; j++)
                 {
+                    //设置目标的坐标-前排优先
                     int posX = Data.cardPos[selfPos].x + front_first[i, j, 0];
                     int posY = Data.cardPos[selfPos].y + front_first[i, j, 1] + posAdjust_Y;
                     targetPos.set(posX, posY);
                     Console.WriteLine("posX: " + posX + "  posY: " + posY);
 
+                    //获取目标索引
                     for (int s = 0; s < speedItemList.Count; s++)
                     {           
                         if (speedItemList[s].card.BornPos == Data.GetPosIndex(targetPos))

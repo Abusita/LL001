@@ -66,22 +66,26 @@ namespace Sever
                 var serMsgPack = ProtoSerialize.Serialize<MsgPack>(msgPack);
                 clientSocket.Send(serMsgPack);
 
+                //新增客户端添加到客户端列表
                 if (clientDict.ContainsKey(newPlayerID))
                     clientDict.Remove(newPlayerID);
                 clientDict.Add(newPlayerID, clientSocket);
                 Console.WriteLine("connect to client: " + clientDict.Count);
 
+                //开启消息接收线程
                 Thread receiveThread = new Thread(ReceiveMessage);
                 receiveThread.Start(clientSocket);
+                //开启消息发送线程
                 Thread sendThread = new Thread(SendMessage);
                 sendThread.Start(clientSocket);
+                //开启消息处理线程
                 Thread msgListHandle = new Thread(MsgHandle);
                 msgListHandle.Start();
             }
         }
 
         /// <summary>
-        /// 接收消息队列处理
+        /// 消息队列处理
         /// </summary>
         private static void MsgHandle()
         {
@@ -94,8 +98,7 @@ namespace Sever
                     switch (sm.MsgType)
                     {
                         case MsgType.CsInitbattlesceneReq:
-                            MsgPack m = GetInitData(sm.MsgFrom);                      
-                            
+                            MsgPack m = GetInitData(sm.MsgFrom);                        
                             sendMsgList.Enqueue(m);
                             break;
                         case MsgType.CsBattlestartReq:
@@ -350,7 +353,6 @@ namespace Sever
         private static void SendMessage(object clientSocket)
         {
             Socket myClientSocket = null;
-            //Socket myClientSocket = (Socket)clientSocket;
             while (true)
             {
                 try
@@ -360,11 +362,9 @@ namespace Sever
                         var serMsgPack = sendMsgList.Dequeue();
                         var msg = ProtoSerialize.Serialize<MsgPack>(serMsgPack);
 
+                        //筛选出消息发往的客户端
                         foreach (KeyValuePair<PlayerID, Socket> item in clientDict)
                         {
-                            Console.WriteLine(item.Key);
-                            Console.WriteLine(serMsgPack.MsgTo);
-                            Console.WriteLine(serMsgPack.MsgType);
                             if (item.Key == serMsgPack.MsgTo)
                             {
                                 myClientSocket = item.Value;
@@ -376,7 +376,6 @@ namespace Sever
                             myClientSocket.Send(msg);
                         else
                             Console.WriteLine("ERROR: myClientSocket is null!");
-                        //Console.WriteLine("send");
                     }
                 }
                 catch (Exception ex)
@@ -390,15 +389,25 @@ namespace Sever
         }
 
 
+        /// <summary>
+        /// 程序主接口
+        /// </summary>
+        /// <param name="args"></param>
         static void Main(string[] args)
         {
+            //初始化数据
             Data.Init();
+
+            //创建连接
             IPAddress ip = IPAddress.Parse("10.0.118.46");
             serverSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             serverSocket.Bind(new IPEndPoint(ip, myProt));
+
+            //客户端最大监听数量
             serverSocket.Listen(10);
             Console.WriteLine("启动监听{0}成功", serverSocket.LocalEndPoint.ToString());
 
+            //开始监听连接
             Thread myThread = new Thread(ListenClientConnect);
             myThread.Start();
         }
