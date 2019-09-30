@@ -10,17 +10,6 @@ namespace Sever
 {
     class Sever
     {
-        /*public class SpeedListItem
-        {
-            public Camps camp = Camps.CsCampPlayer;
-            public CardMsg card = new CardMsg();
-
-            public int cardID = 0;
-            public float speed = 0;
-
-        };*/
-
-
         private static int myProt = 8885;
 
         private static int maxCamps = 2;
@@ -36,6 +25,25 @@ namespace Sever
         
 
         /// <summary>
+        /// 判断存储的客户端列表中是否已存在该客户端
+        /// 存在则返回对应的Key
+        /// </summary>
+        /// <param name="clientSocket"></param>
+        /// <returns>新增连接</returns>
+        static PlayerID ContainsPlayer(Socket clientSocket)
+        {
+            string [] iepC = clientSocket.RemoteEndPoint.ToString().Split(':');
+            foreach (var i in clientDict)
+            {
+                string[] iepS = i.Value.RemoteEndPoint.ToString().Split(':');
+                if (iepC[0] == iepS[0])
+                    return i.Key;
+            }
+            return PlayerID.CsUndefined;
+        }
+
+
+        /// <summary>
         /// 监听事件
         /// </summary>
         static void ListenClientConnect()
@@ -44,15 +52,23 @@ namespace Sever
             {
                 Socket clientSocket = serverSocket.Accept();
 
+                Console.WriteLine("new connect");
+                //断线重连
+                PlayerID newPlayerID = ContainsPlayer(clientSocket);
+                if(newPlayerID == PlayerID.CsUndefined)
+                    newPlayerID = (PlayerID)clientDict.Count; ;
+
                 //接收客户端连接请求,并回执
                 MsgPack msgPack = new MsgPack();
                 msgPack.MsgType = MsgType.CsFirstHandMsg;
                 msgPack.MsgFrom = PlayerID.CsServe;
-                msgPack.MsgTo = (PlayerID)clientDict.Count;
+                msgPack.MsgTo = newPlayerID;
                 var serMsgPack = ProtoSerialize.Serialize<MsgPack>(msgPack);
                 clientSocket.Send(serMsgPack);
-                
-                clientDict.Add((PlayerID)clientDict.Count, clientSocket);
+
+                if (clientDict.ContainsKey(newPlayerID))
+                    clientDict.Remove(newPlayerID);
+                clientDict.Add(newPlayerID, clientSocket);
                 Console.WriteLine("connect to client: " + clientDict.Count);
 
                 Thread receiveThread = new Thread(ReceiveMessage);
@@ -93,55 +109,6 @@ namespace Sever
             }
         }
 
-        /*
-        private static MsgPack InitData()
-        {
-            MsgPack msgPack = new MsgPack();
-            msgPack.MsgType = MsgType.CsInitbattlesceneRes;
-            msgPack.MsgFrom = PlayerID.CsServe;
-            msgPack.MsgTo = PlayerID.CsUndefined;
-            InitItemPack initItemPacks = new InitItemPack();
-
-            Random rand = new Random();
-            for (int i = 0; i < maxCamps; i++)
-            {
-                CampInfo campInfo = new CampInfo();
-                int idIndex = 0;
-                for (int j = 0; j < maxItems / 2; j++)
-                {
-                    CardMsg card = new CardMsg();
-                    float rd;
-
-                    if ((idIndex == 0) && (j == maxItems / 2 - 1))
-                        rd = bornStandard + 1;
-                    else
-                    {
-
-                        rd = rand.Next(0, 100);
-                    }
-                    if (rd > bornStandard)
-                    {
-                        card.IsBorn = true;
-                        card.MaxHp = rd > 10 ? rd : 10;
-                        card.Atk = rd > 60 ? 60 : rd;
-                        card.Def = rd > 30 ? 30 : rd;
-                        card.Speed = rd;
-                        card.BornPos = j;
-                        card.Id = idIndex;
-                        idIndex++;
-                        campInfo.CardItems.Add(card);
-
-                    }
-                }
-                campInfo.Camp = (Camps)i;
-                campInfo.ItemsCount = campInfo.CardItems.Count;
-                initItemPacks.CampInfos.Add(campInfo);
-
-            }
-            msgPack.InitItemPack = initItemPacks;
-            return msgPack;
-        }
-        */
 
         /// <summary>
         /// 初始化场景
