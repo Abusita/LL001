@@ -1,0 +1,59 @@
+syntax = "proto3";
+package cs_protobuf;
+ 
+enum EnmCmdID
+{
+	CS_LOGIN_UNUSED = 0;//proto3中枚举第一个值必须为0
+	CS_LOGIN_REQ = 10001;//登录请求协议号
+	CS_LOGIN_RES = 10002;//登录请求回包协议号
+}
+
+//身份标识符
+enum PlayerID
+{
+	CS_PLAYER_ONE = 0;//头号玩家
+	CS_PLAYER_TWO = 1;
+	CS_PLAYER_THREE = 2;
+	CS_PLAYER_FOUR = 3;
+	CS_PLAYER_FIVE = 4;
+	CS_PLAYER_SIX = 5;
+	CS_ENEMY_ONE = 6;
+	CS_ENEMY_TWO = 7;
+	CS_SERVE = 98;//服务器
+	CS_UNDEFINED = 99;
+}
+
+//卡牌基本属性
+enum CardAttribute
+{
+	CS_CARD_MAXHP = 0;
+	CS_CARD_ATK = 1;
+	CS_CARD_DEF = 2;
+	CS_CARD_SPEED = 3;
+}
+
+
+//卡牌攻击方式
+enum AtkType
+{
+	CS_ATKTYPE_ATK = 0;	//普通攻击
+	CS_ATKTYPE_SKILL = 1; //释放技能
+}
+
+//对战双方标识符
+enum Camps
+{
+	CS_CAMP_PLAYER = 0;
+	CS_CAMP_ENEMY = 1;
+}
+
+//消息类型枚举
+enum MsgType
+{
+
+	CS_FIRST_HAND_MSG = 0;
+	CS_INITBATTLESCENE_REQ = 1;
+	CS_INITBATTLESCENE_RES = 2;
+	CS_BATTLESTART_REQ = 3;
+	CS_BATTLESTART_RES = 4;
+}

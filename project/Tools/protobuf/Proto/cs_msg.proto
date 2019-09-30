@@ -1,0 +1,90 @@
+syntax = "proto3";
+package cs_protobuf;
+
+import "google/protobuf/cs_enum.proto";
+
+message MsgPack
+{
+	MsgType msgType = 1;
+	PlayerID msgFrom = 2;
+	PlayerID msgTo = 3;
+	InitItemPack initItemPack = 4;
+	BattleGroupPack groupPack = 5;
+}
+
+//卡牌
+message CardMsg
+{
+	float maxHp = 1;
+	float atk = 2;
+	float def = 3;
+	float speed = 4;
+
+	int32 id = 5;
+	bool isBorn = 6;
+	int32 bornPos = 7;
+}
+
+//初始化消息包
+message CampInfo
+{
+	PlayerID playerID = 1;//身份
+	Camps camp = 2;	//对战阵营
+	int32 itemsCount = 3;	//卡牌数量
+	repeated CardMsg cardItems = 4;	//卡牌数组
+}
+message InitItemPack
+{
+	repeated CampInfo campInfos = 1;	//阵营列表
+}
+
+
+//对属性值的结果
+message AttributeResult
+{
+	Camps camp = 1;
+	CardAttribute resAttr = 2;	//变更属性
+	float value = 3;	
+}
+//每步中的活跃卡牌
+message ActiveItem
+{
+	Camps camp = 1;
+	CardMsg card = 2;	
+}
+//每步结果
+message StepResult
+{
+	AtkType atkType = 1;
+	repeated AttributeResult attrResList = 2;	
+}
+//回合中的每"步"
+message Step
+{
+	ActiveItem atkItem = 1;
+	ActiveItem defItem = 2;
+	repeated StepResult stepResList = 3;	
+}
+
+//回合
+message Round
+{
+	repeated Step steps = 1;	
+}
+
+//本组对战结果
+message BattleResult
+{
+
+}
+//对战组
+message BattleGroupPack
+{
+	repeated Round rounds = 1;	
+	BattleResult battleResult = 2;
+}
+
+message BattlePack
+{
+	repeated BattleGroupPack battleGroupList = 1;
+}
