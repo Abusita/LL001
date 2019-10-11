@@ -34,10 +34,10 @@ namespace Sever
         /// <param name="selfCamp">本方阵营</param>
         /// <param name="selfPos">当前单位的位置</param>
         /// <returns></returns>
-        public static int GetTargetIndex(List<Data.SpeedItemList> speedItemList, RadarType radarType, Camps selfCamp, int selfPos)
+        public static int GetTargetIndex(List<DataBase.SpeedItemList> speedItemList, RadarType radarType, Camps selfCamp, int selfPos)
         {
-            int posAdjust_Y = -1 * Data.cardPos[selfPos].y;
-            Data.Pos targetPos = new Data.Pos();
+            int posAdjust_Y = -1 * DataBase.cardPos[selfPos].y;
+            DataBase.Pos targetPos = new DataBase.Pos();
 
 
             for (int i = 0; i < 2; i++)
@@ -45,15 +45,15 @@ namespace Sever
                 for (int j = 0; j < 7; j++)
                 {
                     //设置目标的坐标-前排优先
-                    int posX = Data.cardPos[selfPos].x + front_first[i, j, 0];
-                    int posY = Data.cardPos[selfPos].y + front_first[i, j, 1] + posAdjust_Y;
+                    int posX = DataBase.cardPos[selfPos].x + front_first[i, j, 0];
+                    int posY = DataBase.cardPos[selfPos].y + front_first[i, j, 1] + posAdjust_Y;
                     targetPos.set(posX, posY);
                     Console.WriteLine("posX: " + posX + "  posY: " + posY);
 
                     //获取目标索引
                     for (int s = 0; s < speedItemList.Count; s++)
                     {           
-                        if (speedItemList[s].card.BornPos == Data.GetPosIndex(targetPos))
+                        if (speedItemList[s].card.BornPos == DataBase.GetPosIndex(targetPos))
                             if (speedItemList[s].camp != selfCamp)
                                 return s;
                     }

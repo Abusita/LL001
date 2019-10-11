@@ -16,3 +16,12 @@ E:\Porject_LL001\LL001\project\Sever\obj\Debug\Sever.csproj.CoreCompileInputs.ca
 E:\Porject_LL001\LL001\project\Sever\obj\Debug\Sever.csproj.CopyComplete
 E:\Porject_LL001\LL001\project\Sever\obj\Debug\Sever.exe
 E:\Porject_LL001\LL001\project\Sever\obj\Debug\Sever.pdb
+E:\Backup\2019.10.11\Sever\bin\Debug\Sever.exe.config
+E:\Backup\2019.10.11\Sever\bin\Debug\Sever.exe
+E:\Backup\2019.10.11\Sever\bin\Debug\Sever.pdb
+E:\Backup\2019.10.11\Sever\bin\Debug\Google.Protobuf.dll
+E:\Backup\2019.10.11\Sever\obj\Debug\Sever.csprojAssemblyReference.cache
+E:\Backup\2019.10.11\Sever\obj\Debug\Sever.csproj.CoreCompileInputs.cache
+E:\Backup\2019.10.11\Sever\obj\Debug\Sever.csproj.CopyComplete
+E:\Backup\2019.10.11\Sever\obj\Debug\Sever.exe
+E:\Backup\2019.10.11\Sever\obj\Debug\Sever.pdb
