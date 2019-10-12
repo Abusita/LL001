@@ -22,7 +22,7 @@ namespace Sever
         public static void Start()
         {
             //创建连接
-            IPAddress ip = IPAddress.Parse("10.0.117.46");
+            IPAddress ip = IPAddress.Parse("10.0.116.164");
             serverSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             serverSocket.Bind(new IPEndPoint(ip, myProt));
 
@@ -41,6 +41,10 @@ namespace Sever
         /// </summary>
         static void ListenClientConnect()
         {
+            //开启消息发送线程
+            Thread sendThread = new Thread(SendMessage);
+            sendThread.Start();
+
             while (true)
             {
                 Socket clientSocket = serverSocket.Accept();
@@ -68,13 +72,8 @@ namespace Sever
                 //开启消息接收线程
                 Thread receiveThread = new Thread(ReceiveMessage);
                 receiveThread.Start(clientSocket);
-                //开启消息发送线程
-                Thread sendThread = new Thread(SendMessage);
-                sendThread.Start(clientSocket);
-                //开启消息处理线程
-                //Thread msgListHandle = new Thread(MsgHandle);
-                //msgListHandle.Start();
             }
+
         }
 
         /// <summary>
@@ -83,72 +82,27 @@ namespace Sever
         /// <param name="clientSocket"></param>
         private static void ReceiveMessage(object clientSocket)
         {
-            Socket myClientSocket = null;
-            //Socket myClientSocket = (Socket)clientSocket;
-            while (true)
-            {
-                for (int i = 0; i < clientDict.Count; i++)
-                {
-                    myClientSocket = clientDict[(PlayerID)i];
-                    try
-                    {
-                        byte[] tempBuffer = new byte[1024 * 1024 * 2];
-                        var effective = myClientSocket.Receive(tempBuffer);
-                        byte[] resultBuffer = new byte[effective];
+            //Socket myClientSocket = null;
+            Socket myClientSocket = (Socket)clientSocket;
 
-                        Array.Copy(tempBuffer, 0, resultBuffer, 0, effective);
-                        if (effective == 0)
-                        {
-                            break;
-                        }
-                        Console.WriteLine("rescive");
-                        MsgPack msg = ProtoSerialize.Deserialize<MsgPack>(resultBuffer);
-                        MsgManager.receiveMsgList.Enqueue(msg);
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine(ex.Message);
-                        myClientSocket.Shutdown(SocketShutdown.Both);
-                        myClientSocket.Close();
-                        break;
-                    }
-
-                }
-
-            }
-        }
-
-        /// <summary>
-        /// 发送消息
-        /// </summary>
-        /// <param name="clientSocket"></param>
-        private static void SendMessage(object clientSocket)
-        {
-            Socket myClientSocket = null;
             while (true)
             {
                 try
                 {
-                    if (MsgManager.sendMsgList.Count > 0)
+                    byte[] tempBuffer = new byte[1024 * 1024 * 2];
+                    Console.WriteLine("start Rescive");
+                    var effective = myClientSocket.Receive(tempBuffer);
+                    Console.WriteLine("msg in");
+                    byte[] resultBuffer = new byte[effective];
+
+                    Array.Copy(tempBuffer, 0, resultBuffer, 0, effective);
+                    if (effective == 0)
                     {
-                        var serMsgPack = MsgManager.sendMsgList.Dequeue();
-                        var msg = ProtoSerialize.Serialize<MsgPack>(serMsgPack);
-
-                        //筛选出消息发往的客户端
-                        foreach (KeyValuePair<PlayerID, Socket> item in clientDict)
-                        {
-                            if (item.Key == serMsgPack.MsgTo)
-                            {
-                                myClientSocket = item.Value;
-                                break;
-                            }
-
-                        }
-                        if (myClientSocket != null)
-                            myClientSocket.Send(msg);
-                        else
-                            Console.WriteLine("ERROR: myClientSocket is null!");
+                        break;
                     }
+                    MsgPack msg = ProtoSerialize.Deserialize<MsgPack>(resultBuffer);
+                    Console.WriteLine(msg.MsgFrom + " " + msg.MsgType);
+                    MsgManager.receiveMsgList.Enqueue(msg);
                 }
                 catch (Exception ex)
                 {
@@ -157,6 +111,123 @@ namespace Sever
                     myClientSocket.Close();
                     break;
                 }
+            }
+
+
+            //while (true)
+            //{
+            //    for (int i = 0; i < clientDict.Count; i++)
+            //    {
+            //        myClientSocket = clientDict[(PlayerID)i];
+            //        Console.WriteLine((PlayerID)i);
+            //        try
+            //        {     
+            //            byte[] tempBuffer = new byte[1024 * 1024 * 2];
+            //            var effective = myClientSocket.Receive(tempBuffer);
+            //            byte[] resultBuffer = new byte[effective];
+
+            //            Array.Copy(tempBuffer, 0, resultBuffer, 0, effective);
+            //            if (effective == 0)
+            //            {
+            //                break;
+            //            }
+                        
+            //            MsgPack msg = ProtoSerialize.Deserialize<MsgPack>(resultBuffer);
+            //            MsgManager.receiveMsgList.Enqueue(msg);
+            //        }
+            //        catch (Exception ex)
+            //        {
+            //            Console.WriteLine(ex.Message);
+            //            myClientSocket.Shutdown(SocketShutdown.Both);
+            //            myClientSocket.Close();
+            //            break;
+            //        }
+
+            //    }
+
+            //}
+        }
+
+        /// <summary>
+        /// 发送消息
+        /// </summary>
+        /// <param name="clientSocket"></param>
+        private static void SendMessage()
+        {
+            Socket myClientSocket = null;
+            //Socket myClientSocket = (Socket)clientSocket;
+            while (true)
+            {
+                if (MsgManager.sendMsgList.Count > 0)
+                {
+                    var serMsgPack = MsgManager.sendMsgList.Dequeue();
+                    Console.WriteLine(serMsgPack.MsgTo + " "  + serMsgPack.MsgType);
+
+                    var msg = ProtoSerialize.Serialize<MsgPack>(serMsgPack);
+                    
+                    //筛选出消息发往的客户端
+                    foreach (KeyValuePair<PlayerID, Socket> item in clientDict)
+                    {
+                        if (item.Key == serMsgPack.MsgTo)
+                        {
+                            
+                            myClientSocket = item.Value;
+                            break;
+                        }
+
+                    }
+
+                    if (myClientSocket != null)
+                    {
+                        Console.WriteLine(myClientSocket.RemoteEndPoint.ToString());
+                        myClientSocket.Send(msg);
+                        /*try
+                        {
+                            myClientSocket.Send(msg);
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine(ex.Message);
+                            myClientSocket.Shutdown(SocketShutdown.Both);
+                            myClientSocket.Close();
+                            break;
+                        }*/
+                    }
+                    else
+                        Console.WriteLine("myClientSocket is null");
+                }
+
+                //try
+                //{
+                //    if (MsgManager.sendMsgList.Count > 0)
+                //    {
+                //        Console.WriteLine("MsgManager.sendMsgList.Count > 0");
+                //        var serMsgPack = MsgManager.sendMsgList.Dequeue();
+                //        var msg = ProtoSerialize.Serialize<MsgPack>(serMsgPack);
+
+                //        //筛选出消息发往的客户端
+                //        foreach (KeyValuePair<PlayerID, Socket> item in clientDict)
+                //        {
+                //            if (item.Key == serMsgPack.MsgTo)
+                //            {
+                //                myClientSocket = item.Value;
+                //                break;
+                //            }
+
+                //        }
+                //        if (myClientSocket != null)
+                //            myClientSocket.Send(msg);
+                //        else
+                //            Console.WriteLine("ERROR: myClientSocket is null!");
+                //    }
+                //}
+                //catch (Exception ex)
+                //{
+                //    Console.WriteLine(ex.Message);
+                //    myClientSocket.Shutdown(SocketShutdown.Both);
+                //    myClientSocket.Close();
+                //    break;
+                //}
             }
         }
 
