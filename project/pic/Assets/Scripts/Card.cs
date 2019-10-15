@@ -23,7 +23,7 @@ public class Card : MonoBehaviour {
     [HideInInspector]
     public Camps camp = Camps.CsCampPlayer;
     //private List<AttributeResult> attributeResults;
-    private Queue<AttributeResult> attributeResults;
+    private Queue<AttributeResult> attrResults;
 
 
     /// <summary>
@@ -36,7 +36,7 @@ public class Card : MonoBehaviour {
         {
             if(it.Camp == camp)
             {
-                attributeResults.Enqueue(it);
+                attrResults.Enqueue(it);
             }
         }
     }
@@ -46,16 +46,14 @@ public class Card : MonoBehaviour {
     /// </summary>
     public void OnCollisionHandle()
     {
-        if(attributeResults.Count > 0)
+        if(attrResults.Count > 0)
         {
-            var item = attributeResults.Dequeue();
+            var item = attrResults.Dequeue();
             switch (item.ResAttr)
             {
                 case CardAttribute.CsCardMaxhp:
                     maxHp -= item.Value;
                     maxHp = Mathf.Clamp(maxHp, 0, 100);
-                    //Debug.Log("damage is ： " + item.Value);
-                    //Debug.Log(camp + " 的 " + bornPos + " 剩余血量: " + maxHp);
                     break;
                 case CardAttribute.CsCardAtk:
                     break;
@@ -72,7 +70,7 @@ public class Card : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-        attributeResults = new Queue<AttributeResult>();
+        attrResults = new Queue<AttributeResult>();
 
     }
 	

@@ -15,9 +15,9 @@ public class OnButtonClickEvent : MonoBehaviour {
 
         MsgPack msg = new MsgPack();
         msg.MsgType = MsgType.CsInitbattlesceneReq;
-        msg.MsgFrom = MsgHandle.playerID;
+        msg.MsgFrom = MsgManager.playerID;
         msg.MsgTo = PlayerID.CsServe;
-        MsgHandle.SendMsgList.Enqueue(msg);
+        MsgManager.SendMsgList.Enqueue(msg);
     }
 
     /// <summary>
@@ -35,9 +35,9 @@ public class OnButtonClickEvent : MonoBehaviour {
     {
         MsgPack msg = new MsgPack();
         msg.MsgType = MsgType.CsBattlestartReq;
-        msg.MsgFrom = MsgHandle.playerID;
+        msg.MsgFrom = MsgManager.playerID;
         msg.MsgTo = PlayerID.CsServe;
-        MsgHandle.SendMsgList.Enqueue(msg);
+        MsgManager.SendMsgList.Enqueue(msg);
 
     }
 

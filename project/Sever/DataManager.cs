@@ -26,6 +26,16 @@ namespace Sever
         }
 
         /// <summary>
+        /// 战斗单位
+        /// </summary>
+        public class SpeedItem
+        {
+            public Camps camp = Camps.CsCampPlayer;
+            public CardMsg card = new CardMsg();
+
+        }
+
+        /// <summary>
         /// 初始化场景
         /// </summary>
         /// <returns></returns>
@@ -108,12 +118,12 @@ namespace Sever
                 BattleGroup curBattleGroup = battleGroupDict[playerID];
 
                 //创建SpeedItemList，添加在场所有单位
-                List<DataBase.SpeedItemList> speedItemLists = new List<DataBase.SpeedItemList>();
+                List<SpeedItem> speedItemLists = new List<SpeedItem>();
                 foreach (CampInfo c in curBattleGroup.campInfo)
                 {
                     foreach (CardMsg card in c.CardItems)
                     {
-                        DataBase.SpeedItemList item = new DataBase.SpeedItemList();
+                        SpeedItem item = new SpeedItem();
                         item.camp = c.Camp;
                         item.card = card;
                         speedItemLists.Add(item);
@@ -122,7 +132,7 @@ namespace Sever
 
                 //SpeedItemList中元素依速度降序排序
                 speedItemLists.Sort((x, y) => { return y.card.Speed.CompareTo(x.card.Speed); });
-                foreach (DataBase.SpeedItemList s in speedItemLists)
+                foreach (SpeedItem s in speedItemLists)
                     Console.WriteLine("camp: " + s.camp + "  pos: " + s.card.BornPos + "  speed: " + s.card.Speed + "  maxHp: " + s.card.MaxHp);
 
 

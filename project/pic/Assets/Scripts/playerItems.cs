@@ -13,8 +13,11 @@ public class playerItems : MonoBehaviour {
     public PlayerID playerID;               //玩家标识符
     public Camps localCamp;
 
-
-    private void Init(CampInfo campInfo)
+    /// <summary>
+    /// 对外初始化接口
+    /// </summary>
+    /// <param name="campInfo"></param>
+    public void InitCard(CampInfo campInfo)
     {
         if (campInfo != null)
         {
@@ -35,15 +38,6 @@ public class playerItems : MonoBehaviour {
 
             }
         }
-    }
-
-    /// <summary>
-    /// 对外初始化接口
-    /// </summary>
-    /// <param name="campInfo"></param>
-    public void InitCard(CampInfo campInfo)
-    {
-        Init(campInfo);
     }
 
 
