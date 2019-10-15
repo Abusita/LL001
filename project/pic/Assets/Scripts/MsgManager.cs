@@ -4,12 +4,13 @@ using UnityEngine;
 using CsProtobuf;
 
 
-public class MsgManager : MonoBehaviour {
+public class MsgManager : MonoBehaviour
+{
 
     public static Queue<MsgPack> ReceiveMsgList;    //消息接收队列
     public static Queue<MsgPack> SendMsgList;       //消息发送队列
     public static PlayerID playerID;                //客户端身份
-	
+
     /// <summary>
     /// 消息处理
     /// </summary>
@@ -50,11 +51,11 @@ public class MsgManager : MonoBehaviour {
     public static void showMsg(MsgPack msg)
     {
         BattleGroupPack battleGroupPack = msg.GroupPack;
-        foreach(Round r in battleGroupPack.Rounds)
+        foreach (Round r in battleGroupPack.Rounds)
         {
-            foreach(Step st in r.Steps)
+            foreach (Step st in r.Steps)
             {
-                Debug.Log(" " + st.AtkItem.Camp + "  VS  " + st.DefItem.Camp + ": " +st.StepResList[0].AttrResList[0].ResAttr + " " + st.StepResList[0].AttrResList[0].Value);
+                Debug.Log(" " + st.AtkItem.Camp + "  VS  " + st.DefItem.Camp + ": " + st.StepResList[0].AttrResList[0].ResAttr + " " + st.StepResList[0].AttrResList[0].Value);
             }
         }
     }
@@ -67,7 +68,8 @@ public class MsgManager : MonoBehaviour {
         playerID = PlayerID.CsUndefined;
     }
     // Update is called once per frame
-    void Update () {
+    void Update()
+    {
 
         MsgHandle();
     }
