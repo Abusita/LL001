@@ -5,8 +5,10 @@ using CsProtobuf;
 
 public class Card : MonoBehaviour {
 
-
+    [HideInInspector]
     public float maxHp = 0;
+    [HideInInspector]
+    public float curHp = 0;
     [HideInInspector]
     public float atk = 0;
     [HideInInspector]
@@ -22,9 +24,24 @@ public class Card : MonoBehaviour {
     public int bornPos = 0;
     [HideInInspector]
     public Camps camp = Camps.CsCampPlayer;
-    //private List<AttributeResult> attributeResults;
     private Queue<AttributeResult> attrResults;
 
+
+    /// <summary>
+    /// 初始化卡牌
+    /// </summary>
+    /// <param name="card">卡牌信息</param>
+    /// <param name="localCamp">卡牌所在阵营</param>
+    public void Init(CardMsg card, Camps localCamp)
+    {
+        this.atk = card.Atk;
+        this.maxHp = card.MaxHp;
+        this.curHp = card.MaxHp;
+        this.def = card.Def;
+        this.speed = card.Speed;
+        this.bornPos = card.BornPos;
+        this.camp = localCamp;
+    }
 
     /// <summary>
     /// 本步结果筛选
@@ -52,8 +69,8 @@ public class Card : MonoBehaviour {
             switch (item.ResAttr)
             {
                 case CardAttribute.CsCardMaxhp:
-                    maxHp -= item.Value;
-                    maxHp = Mathf.Clamp(maxHp, 0, 100);
+                    curHp -= item.Value;
+                    curHp = Mathf.Clamp(curHp, 0, maxHp);
                     break;
                 case CardAttribute.CsCardAtk:
                     break;
@@ -76,7 +93,7 @@ public class Card : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        if (maxHp == 0)
+        if (curHp == 0)
         {
             Destroy(this.gameObject);
         }

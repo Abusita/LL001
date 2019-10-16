@@ -27,13 +27,7 @@ public class enemyItems : MonoBehaviour {
                 card.transform.SetParent(items[bornPos].transform);
                 card.transform.localPosition = Vector3.zero;
 
-                items[bornPos].GetComponentInChildren<Card>().atk = it.Atk;
-                items[bornPos].GetComponentInChildren<Card>().maxHp = it.MaxHp;
-                items[bornPos].GetComponentInChildren<Card>().def = it.Def;
-                items[bornPos].GetComponentInChildren<Card>().speed = it.Speed;
-                items[bornPos].GetComponentInChildren<Card>().bornPos = it.BornPos;
-                items[bornPos].GetComponentInChildren<Card>().camp = localCamp;
-
+                items[bornPos].GetComponentInChildren<Card>().Init(it, localCamp);
             }
         }
     }
