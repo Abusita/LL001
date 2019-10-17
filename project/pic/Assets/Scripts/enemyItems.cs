@@ -12,10 +12,10 @@ public class enemyItems : MonoBehaviour {
     public Camps localCamp;
 
     /// <summary>
-    /// 初始化接口
+    /// 对外初始化接口
     /// </summary>
     /// <param name="campInfo"></param>
-    private void Init(CampInfo campInfo)
+    public void InitCard(CampInfo campInfo)
     {
         if (campInfo != null)
         {
@@ -24,26 +24,12 @@ public class enemyItems : MonoBehaviour {
                 int bornPos = it.BornPos;
 
                 GameObject card = Instantiate(cardItem, items[bornPos].transform.position, Quaternion.identity);
-                card.transform.parent = items[bornPos].transform;
+                card.transform.SetParent(items[bornPos].transform);
                 card.transform.localPosition = Vector3.zero;
 
-                items[bornPos].GetComponentInChildren<Card>().atk = it.Atk;
-                items[bornPos].GetComponentInChildren<Card>().maxHp = it.MaxHp;
-                items[bornPos].GetComponentInChildren<Card>().def = it.Def;
-                items[bornPos].GetComponentInChildren<Card>().speed = it.Speed;
-                items[bornPos].GetComponentInChildren<Card>().bornPos = it.BornPos;
-                items[bornPos].GetComponentInChildren<Card>().camp = localCamp;
+                items[bornPos].GetComponentInChildren<Card>().Init(it, localCamp);
             }
         }
-    }
-
-    /// <summary>
-    /// 外部初始化接口
-    /// </summary>
-    /// <param name="campInfo"></param>
-    public void InitCard(CampInfo campInfo)
-    {
-        Init(campInfo);
     }
 
     /// <summary>

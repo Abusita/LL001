@@ -34,7 +34,7 @@ namespace Sever
         /// <param name="selfCamp">本方阵营</param>
         /// <param name="selfPos">当前单位的位置</param>
         /// <returns></returns>
-        public static int GetTargetIndex(List<DataBase.SpeedItemList> speedItemList, RadarType radarType, Camps selfCamp, int selfPos)
+        public static int GetTargetIndex(List<DataManager.SpeedItem> speedItemList, RadarType radarType, Camps selfCamp, int selfPos)
         {
             int posAdjust_Y = -1 * DataBase.cardPos[selfPos].y;
             DataBase.Pos targetPos = new DataBase.Pos();

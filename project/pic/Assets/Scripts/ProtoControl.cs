@@ -20,7 +20,7 @@ public class ProtoControl : MonoBehaviour {
     void ConnectToSever()
     {
         //设定服务器IP地址 
-        IPAddress ip = IPAddress.Parse("10.0.117.46");
+        IPAddress ip = IPAddress.Parse("10.0.118.154");
         clientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
         try
         {
@@ -71,7 +71,7 @@ public class ProtoControl : MonoBehaviour {
                     break;
                 }
                 MsgPack msg = ProtoSerialize.Deserialize<MsgPack>(resultBuffer);
-                MsgHandle.ReceiveMsgList.Enqueue(msg);
+                MsgManager.ReceiveMsgList.Enqueue(msg);
             }
             catch (Exception ex)
             {

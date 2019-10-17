@@ -26,7 +26,7 @@ public class BattleControl : MonoBehaviour {
                 InitScene(msg);
                 break;
             case MsgType.CsBattlestartRes:      //开始战斗回执
-                BattleSart(msg);
+                BattleSatrt(msg);
                 break;
             default:
                 break;
@@ -69,27 +69,11 @@ public class BattleControl : MonoBehaviour {
     /// 开始战斗
     /// </summary>
     /// <param name="msg"></param>
-    public void BattleSart(MsgPack msg)
+    public void BattleSatrt(MsgPack msg)
     {
         this.groupPack = msg.GroupPack;
-        //showMsg(groupPack);
-
-
 
         RunByStep();
-    }
-
-    /// <summary>
-    /// 重置所有Item的tag
-    /// </summary>
-    public void ResetItemTag()
-    {
-        foreach (GameObject item in Groups[(int)Camps.CsCampPlayer].GetComponent<playerItems>().items)
-            foreach (Transform child in item.transform)
-                child.tag = "Untagged";
-        foreach (GameObject item in Groups[(int)Camps.CsCampEnemy].GetComponent<enemyItems>().items)
-            foreach (Transform child in item.transform)
-                child.tag = "Untagged";
     }
 
     /// <summary>
@@ -122,7 +106,7 @@ public class BattleControl : MonoBehaviour {
             pItems[atkItem.Card.BornPos].GetComponentsInChildren<Transform>()[1].tag = "atkItem";
             eItems[defItem.Card.BornPos].GetComponentsInChildren<Transform>()[1].tag = "defItem";
 
-            pItems[atkItem.Card.BornPos].GetComponentInChildren<CardItem>().Move(endPos - startPos);
+            pItems[atkItem.Card.BornPos].GetComponentInChildren<CardItem>().SetMoveDir(endPos - startPos);
 
             StepResult stepRes = groupPack.Rounds[roundIndex].Steps[setpIndex].StepResList[0];
             pItems[atkItem.Card.BornPos].GetComponentInChildren<Card>().StepAttrRes(stepRes);
@@ -133,13 +117,10 @@ public class BattleControl : MonoBehaviour {
             Vector3 startPos = eItems[atkItem.Card.BornPos].transform.position;
             Vector3 endPos = pItems[defItem.Card.BornPos].transform.position;
 
-            //Debug.Log("atkItem.Card.BornPos " + atkItem.Card.BornPos + " " + pItems[atkItem.Card.BornPos].name);
-            //Debug.Log("defItem.Card.BornPos " + defItem.Card.BornPos + " " + pItems[defItem.Card.BornPos].name);
-
             eItems[atkItem.Card.BornPos].GetComponentsInChildren<Transform>()[1].tag = "atkItem";
             pItems[defItem.Card.BornPos].GetComponentsInChildren<Transform>()[1].tag = "defItem";
 
-            eItems[atkItem.Card.BornPos].GetComponentInChildren<CardItem>().Move(endPos - startPos);
+            eItems[atkItem.Card.BornPos].GetComponentInChildren<CardItem>().SetMoveDir(endPos - startPos);
 
             StepResult stepRes = groupPack.Rounds[roundIndex].Steps[setpIndex].StepResList[0];
             eItems[atkItem.Card.BornPos].GetComponentInChildren<Card>().StepAttrRes(stepRes);
@@ -148,6 +129,20 @@ public class BattleControl : MonoBehaviour {
 
         setpIndex++;
     }
+
+    /// <summary>
+    /// 重置所有Item的tag
+    /// </summary>
+    public void ResetItemTag()
+    {
+        foreach (GameObject item in Groups[(int)Camps.CsCampPlayer].GetComponent<playerItems>().items)
+            foreach (Transform child in item.transform)
+                child.tag = "Untagged";
+        foreach (GameObject item in Groups[(int)Camps.CsCampEnemy].GetComponent<enemyItems>().items)
+            foreach (Transform child in item.transform)
+                child.tag = "Untagged";
+    }
+
 
     /// <summary>
     /// 重置界面
