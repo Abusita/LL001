@@ -5,38 +5,49 @@ using UnityEngine;
 public class CardItem : MonoBehaviour {
 
     [HideInInspector]
-    public float moveSpeed = 10.0f;     //移动速度
-    private SpriteRenderer sr;          //Renderer组件，改变Sprite层级
-    private Vector3 moveDir;            //移动方向向量
-    private Vector3 startPos;           //起点位置
-    private bool isMove;                //是否移动
-    private bool isReturn;              //是否归位
+    public float moveSpeed = 10.0f;
 
-    /// <summary>
-    /// 销毁
-    /// </summary>
+    SpriteRenderer sr;
+
+    //移动方向向量
+    Vector3 moveDir;
+    //起点位置
+    Vector3 startPos;
+
+    bool isMove;
+    bool isReturn;
+
     public void DestoryItem()
     {
         GameObject.Destroy(this.gameObject);
     }
 
-    /// <summary>
-    /// 设置初始移动方向
-    /// </summary>
-    /// <param name="moveDir">方向向量</param>
-    public void SetMoveDir(Vector3 moveDir)
+
+	// Use this for initialization
+	void Start () {
+        this.sr = this.GetComponent<SpriteRenderer>();
+
+        this.moveDir = new Vector3(0.0f, 0.0f, 0.0f);
+        this.startPos = transform.position;
+        this.isMove = false;
+        this.isReturn = false;
+	}
+
+    public void Move(Vector3 moveDir)
     {
         this.moveDir = moveDir.normalized;
         this.isMove = true;
         this.sr.sortingOrder = 1;
     }
 
-    /// <summary>
-    /// 控制卡牌移动
-    /// </summary>
-    void Move()
-    {
-        if (isMove)
+
+	// Update is called once per frame
+	void FixedUpdate () {
+
+        //float h = Input.GetAxisRaw("Horizontal");
+        //float v = Input.GetAxisRaw("Vertical");
+
+        if(isMove)
         {
             if (isReturn)
             {
@@ -56,23 +67,6 @@ public class CardItem : MonoBehaviour {
             }
             transform.Translate(moveDir * moveSpeed * Time.fixedDeltaTime);
         }
-    }
-
-
-    // Use this for initialization
-    void Start()
-    {
-        this.sr = this.GetComponent<SpriteRenderer>();
-
-        this.moveDir = new Vector3(0.0f, 0.0f, 0.0f);
-        this.startPos = transform.position;
-        this.isMove = false;
-        this.isReturn = false;
-    }
-
-    // Update is called once per frame
-    void FixedUpdate () {
-        Move();
     }
 
     #region == OnCollisionEvent ==
