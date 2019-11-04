@@ -12,9 +12,35 @@ namespace Sever
     {
 
         #region == Data.Pos == 
-
         public static Dictionary<int, Pos> cardPos = new Dictionary<int, Pos>();
 
+        /// <summary>
+        /// 坐标
+        /// </summary>
+        public class Pos
+        {
+            public int x = 0;
+            public int y = 0;
+
+            public void set(int x, int y)
+            {
+                this.x = x;
+                this.y = y;
+            }
+
+            public bool isEqual(Pos p)
+            {
+                if ((this.x == p.x) && (this.y == p.y))
+                    return true;
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// 根据坐标获取在cardPos中的对应位置
+        /// </summary>
+        /// <param name="p">坐标</param>
+        /// <returns></returns>
         public static int GetPosIndex(Pos p)
         {
             foreach (var item in cardPos)
@@ -46,44 +72,7 @@ namespace Sever
                     index++;
                 }
         }
-
         #endregion
-
-
-
-
-        /// <summary>
-        /// 坐标
-        /// </summary>
-        public class Pos
-        {
-            public int x = 0;
-            public int y = 0;
-
-            public void set(int x, int y)
-            {
-                this.x = x;
-                this.y = y;
-            }
-
-            public bool isEqual(Pos p)
-            {
-                if ((this.x == p.x) && (this.y == p.y))
-                    return true;
-                return false;
-            }
-        }
-
-
-        /// <summary>
-        /// 战斗单位列表（order by speed）
-        /// </summary>
-        public class SpeedItemList
-        {
-            public Camps camp = Camps.CsCampPlayer;
-            public CardMsg card = new CardMsg();
-
-        }
 
         /// <summary>
         /// 初始化接口

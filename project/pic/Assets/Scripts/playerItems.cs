@@ -13,8 +13,11 @@ public class playerItems : MonoBehaviour {
     public PlayerID playerID;               //玩家标识符
     public Camps localCamp;
 
-
-    private void Init(CampInfo campInfo)
+    /// <summary>
+    /// 对外初始化接口
+    /// </summary>
+    /// <param name="campInfo"></param>
+    public void InitCard(CampInfo campInfo)
     {
         if (campInfo != null)
         {
@@ -26,24 +29,9 @@ public class playerItems : MonoBehaviour {
                 card.transform.SetParent(items[bornPos].transform);
                 card.transform.localPosition = Vector3.zero;
 
-                items[bornPos].GetComponentInChildren<Card>().atk = it.Atk;
-                items[bornPos].GetComponentInChildren<Card>().maxHp = it.MaxHp;
-                items[bornPos].GetComponentInChildren<Card>().def = it.Def;
-                items[bornPos].GetComponentInChildren<Card>().speed = it.Speed;
-                items[bornPos].GetComponentInChildren<Card>().bornPos = it.BornPos;
-                items[bornPos].GetComponentInChildren<Card>().camp = localCamp;
-
+                items[bornPos].GetComponentInChildren<Card>().Init(it, localCamp);
             }
         }
-    }
-
-    /// <summary>
-    /// 对外初始化接口
-    /// </summary>
-    /// <param name="campInfo"></param>
-    public void InitCard(CampInfo campInfo)
-    {
-        Init(campInfo);
     }
 
 
