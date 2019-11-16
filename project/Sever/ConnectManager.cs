@@ -212,6 +212,7 @@ namespace Sever
         /// </summary>
         public static void Start()
         {
+
             //创建连接
             IPAddress ip = IPAddress.Parse(GetLocalIP());
             serverSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
