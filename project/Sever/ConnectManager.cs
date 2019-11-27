@@ -193,7 +193,7 @@ namespace Sever
         public static void Start()
         {
             //创建连接
-            IPAddress ip = IPAddress.Parse("10.0.118.154");
+            IPAddress ip = IPAddress.Parse("127.0.0.1");
             serverSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             serverSocket.Bind(new IPEndPoint(ip, myProt));
 

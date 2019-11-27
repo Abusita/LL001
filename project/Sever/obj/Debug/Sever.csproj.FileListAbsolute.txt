@@ -25,3 +25,12 @@ E:\Backup\2019.10.11\Sever\obj\Debug\Sever.csproj.CoreCompileInputs.cache
 E:\Backup\2019.10.11\Sever\obj\Debug\Sever.csproj.CopyComplete
 E:\Backup\2019.10.11\Sever\obj\Debug\Sever.exe
 E:\Backup\2019.10.11\Sever\obj\Debug\Sever.pdb
+E:\Users\gaokai\Documents\GitHub\LL001\project\Sever\bin\Debug\Sever.exe.config
+E:\Users\gaokai\Documents\GitHub\LL001\project\Sever\bin\Debug\Sever.exe
+E:\Users\gaokai\Documents\GitHub\LL001\project\Sever\bin\Debug\Sever.pdb
+E:\Users\gaokai\Documents\GitHub\LL001\project\Sever\bin\Debug\Google.Protobuf.dll
+E:\Users\gaokai\Documents\GitHub\LL001\project\Sever\obj\Debug\Sever.csprojAssemblyReference.cache
+E:\Users\gaokai\Documents\GitHub\LL001\project\Sever\obj\Debug\Sever.csproj.CoreCompileInputs.cache
+E:\Users\gaokai\Documents\GitHub\LL001\project\Sever\obj\Debug\Sever.csproj.CopyComplete
+E:\Users\gaokai\Documents\GitHub\LL001\project\Sever\obj\Debug\Sever.exe
+E:\Users\gaokai\Documents\GitHub\LL001\project\Sever\obj\Debug\Sever.pdb
