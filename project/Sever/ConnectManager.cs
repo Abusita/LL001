@@ -186,6 +186,26 @@ namespace Sever
             return PlayerID.CsUndefined;
         }
 
+        /// <summary>
+        /// 获取本地IP地址
+        /// </summary>
+        /// <returns></returns>
+        public static string GetLocalIP()
+        {
+            try
+            {
+                IPHostEntry IpEntry = Dns.GetHostEntry(Dns.GetHostName());
+                foreach (IPAddress item in IpEntry.AddressList)
+                {
+                    if (item.AddressFamily == AddressFamily.InterNetwork)
+                    {
+                        return item.ToString();
+                    }
+                }
+                return "";
+            }
+            catch { return ""; }
+        }
 
         /// <summary>
         /// 开启服务器
@@ -193,7 +213,7 @@ namespace Sever
         public static void Start()
         {
             //创建连接
-            IPAddress ip = IPAddress.Parse("127.0.0.1");
+            IPAddress ip = IPAddress.Parse(GetLocalIP());
             serverSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             serverSocket.Bind(new IPEndPoint(ip, myProt));
 
